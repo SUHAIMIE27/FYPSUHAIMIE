@@ -1,166 +1,125 @@
-\chapter{INTRODUCTION}
-helo world 
-% \RequirePackage{siunitx}
-A container with an initial volume of \SI{10}{\liter} expands to \SI{10.5}{\liter} when its temperature is increased from \SI{9}{\kelvin} to \SI{10}{\kelvin}. Calculate the coefficient of volume expansion of the container's material.
+\chapter{Introduction}
 
-Sleepiness is defined as the increased sleep propensity due to decrease in physiological arousal \parencite{Lal_2005as, Vassalli2009}. 	Sleepiness is a term that indicates the perceived need or readiness to sleep  \parencite{Amso_2015}.
+%====================================================
+\section{1.1 Overview of the Chapter}
 
-\par The introduction chapter of a thesis sets the stage for the entire research, providing the reader with essential background information, the context of the study, and a clear outline of the research objectives and significance. Each section within the introduction builds upon the previous one, gradually guiding the reader toward understanding the research problem and the purpose of the study. This section can be divided in multiple subsection to organize the information logically.
+This chapter introduces the research background and foundational concepts related to explainable machine learning–based fault classification of power transformers using Dissolved Gas Analysis (DGA). The purpose of this chapter is to establish the context of the study, define the problem domain, and highlight the motivation for integrating machine learning and explainable artificial intelligence in transformer fault diagnosis.
 
-\section{Background}
+Power transformers are essential components in modern electrical power systems, and their continuous operation is critical for ensuring reliable energy transmission and distribution. Due to their importance, even minor faults can lead to significant system instability and operational losses. Therefore, effective condition monitoring techniques are required to ensure early fault detection and system reliability \parencite{Wang2023Imbalanced}.
 
-In this section, you aim to provide the reader with the foundational knowledge necessary to understand the broader context of your research. This includes explaining key concepts, relevant terminology.
+This chapter also provides a structured transition from traditional diagnostic approaches to data-driven machine learning methods. It explains how conventional DGA interpretation techniques are limited in handling complex fault patterns, and how machine learning models offer improved adaptability through data-driven learning mechanisms \parencite{Dladla2025SLR}.
 
-\section{The Best Thing to Learn about Computer Programming}
+Finally, the chapter outlines the key research gaps, objectives, and scope of the study, which collectively guide the development of the proposed methodology in subsequent chapters \parencite{Cao2024Advancement}.
 
-The most valuable aspect of learning computer programming is not the mastery of a specific language or framework, but rather the development of computational thinking and problem-solving skills. Programming teaches one how to break down complex, multi-faceted problems into smaller, manageable components—a process known as decomposition. Furthermore, it fosters the ability to think abstractly, allowing for the creation of reusable solutions and the understanding of underlying patterns that transcend individual lines of code. This mindset is universally applicable, extending far beyond the realm of software development into any field that requires logical reasoning and structured analysis.
+%====================================================
+\section{1.2 Background of Transformer Condition Monitoring}
 
+Power transformers operate under continuous electrical, thermal, and mechanical stress throughout their operational lifespan. These stresses gradually degrade insulation materials, making transformers susceptible to internal faults if not properly monitored.
 
-\begin{figure}
-	\centering
-	\includegraphics[width=15cm]{Writing research research proposal.png}
-	\caption[Research Proposal Flow Chart]
-	{The image is a flow chart titled "Research Proposal Flow Chart," designed to guide the development of a research proposal through six key stages: Introduction, Literature Review, Methodology, Preliminary Data, Statement of Limitations, and Conclusion. Each stage addresses specific questions like "What?", "Why?", and "How?", ensuring a comprehensive and structured approach. The chart outlines the progression from defining the research question and reviewing relevant literature, to detailing the methodology, presenting preliminary data, discussing limitations, and concluding with the significance of the research. This visual tool is essential for researchers in planning and articulating their study in a coherent and logical manner.. Figure adapted from \cite{Dorsett2010}.}
-	\label{fig:ExxonSpreading}
-\end{figure}
-%
+Transformer failures can lead to severe consequences such as power outages, equipment damage, and cascading failures across interconnected power networks. These failures may also impact critical infrastructure including healthcare systems, transportation networks, and industrial operations.
 
-\begin{figure}
-	\centering
-	\includegraphics[width=15cm]{Writing research research proposal.png}
-	\caption[]
-	{DKLFDLKSFHASLDHKJS}
-	\label{fig:ExxonSpreading1}
-\end{figure}
+To mitigate such risks, condition monitoring systems are widely implemented in power systems. These systems aim to detect early signs of deterioration before catastrophic failure occurs. Among various diagnostic methods, Dissolved Gas Analysis (DGA) has been widely recognized as one of the most effective techniques for transformer health assessment \parencite{Ali2023ConventionalDGA}.
 
-% \subsection{Concept and Terminology Explanation}
+%====================================================
+\section{1.3 Background of the Problem}
 
-% In this subsection, you should broadly explain the key concepts and terminology that are central to your research. This will help ensure that readers who are not familiar with the topic can follow along.
+Dissolved Gas Analysis (DGA) is a diagnostic technique used to identify internal transformer faults by analyzing gases dissolved in transformer oil. When transformers experience thermal or electrical stress, decomposition of insulating materials produces characteristic gases that dissolve in the oil.
 
+The key gases involved in DGA include hydrogen (H$_2$), methane (CH$_4$), ethane (C$_2$H$_6$), ethylene (C$_2$H$_4$), acetylene (C$_2$H$_2$), carbon monoxide (CO), and carbon dioxide (CO$_2$). These gases are directly associated with different fault mechanisms and energy levels inside transformers \parencite{IEC60599}.
 
+International standards such as IEEE C57.104-2019 and IEC 60599:2022 define structured diagnostic guidelines for interpreting gas concentrations and ratios. These standards are widely used in industrial applications for transformer fault diagnosis \parencite{IEEEC57104}.
 
+However, real-world transformer environments introduce complexity due to varying load conditions, aging effects, and environmental influences, which may affect gas generation patterns and reduce the effectiveness of rule-based interpretation methods.
 
-\section{ Importance and Relevance} 
-\label{SplitScheduleExplain}
+%====================================================
+\subsection{1.3.1 Physical Meaning of Gas Generation}
 
-In this subsection, explain why the topic is important and relevant. Include statistics, the impact of the topic on society, and any related government policies or initiatives. This helps to justify why your research is necessary and valuable.
+Gas generation in transformer oil is directly linked to the type and severity of internal faults. Different fault mechanisms produce distinct gas signatures depending on the energy level of the fault.
 
+Low-energy electrical faults such as partial discharge typically generate hydrogen as the dominant gas due to localized ionization processes. Medium and high thermal faults generate hydrocarbon gases such as methane, ethane, and ethylene due to gradual decomposition of insulation materials.
 
+High-energy electrical faults such as arcing generate acetylene, which is considered a critical indicator of severe internal transformer failure \parencite{Dladla2025SLR}.
 
+Thermal faults are generally associated with gradual overheating processes, whereas electrical faults are associated with sudden high-energy discharge events. This physical relationship between gas generation and fault types forms the basis of DGA-based transformer diagnosis \parencite{Cao2024Advancement}.
 
-\section{Motivation}
+%====================================================
+\section{1.4 Conventional DGA Interpretation Methods}
 
-The motivation section of a thesis is crucial as it articulates the rationale behind the research, highlighting its importance and relevance. This section will help connects the background information with the research objectives by explaining why the study is necessary and what gaps it aims to fill. 
+Conventional DGA interpretation methods are rule-based diagnostic approaches used to classify transformer faults based on gas concentrations and ratios. These methods are widely used due to their simplicity and alignment with international standards.
 
-This section (and its subsection) builds a compelling case for the research by discussing the potential benefits and impact of the findings, thereby justifying the effort and resources invested in the study. The motivation section ensures that the reader understands the significance of the problem being addressed and the value that the proposed solutions can bring to the field.
+Common methods include the Key Gas method, Rogers Ratio method, IEC Ratio method, Duval Triangle, and Duval Pentagon. These methods rely on predefined rules or graphical boundaries to classify transformer fault conditions \parencite{Ali2023ConventionalDGA}.
 
-You can give a brief overview or compact explaination from the literature review, what is there, but what is still missing. or the justification of why you insist of using some technique
+The main advantage of these methods is their ease of use and interpretability, making them suitable for field applications where quick decision-making is required.
 
+However, these methods have limitations such as rigid classification boundaries, sensitivity to measurement errors, and inability to handle overlapping or complex fault conditions. In some cases, different methods may produce inconsistent results for the same transformer condition.
 
-\subsection{Some subsection to decompose your explaination}
+%====================================================
+\section{1.5 Machine Learning Motivation in DGA Fault Diagnosis}
 
+Machine learning techniques have been introduced to overcome the limitations of conventional DGA interpretation methods. These techniques enable data-driven learning of complex nonlinear relationships between gas concentrations and transformer fault types.
 
+Unlike rule-based systems, machine learning models can automatically learn patterns from historical data without requiring predefined diagnostic rules. This allows them to adapt more effectively to real-world transformer operating conditions \parencite{Wang2021GPMC}.
 
+One major advantage of machine learning is automation, which enables consistent and scalable fault classification across large datasets and monitoring systems.
 
-\section{Problem Formulation}
+However, challenges such as class imbalance, weak feature representation, and lack of interpretability remain significant issues in DGA-based machine learning systems \parencite{Azmi2025Imbalance}.
 
+%====================================================
+\subsection{1.5.1 Problem Formulation}
 
-\subsection{Research Gap}
+Despite the success of machine learning in transformer fault classification, several challenges remain unresolved.
 
-The identified gap based on your literature review
+Machine learning models often show inconsistent performance across different DGA datasets due to variations in data distribution and preprocessing methods. This reduces model reliability and generalization capability.
 
+In addition, DGA datasets frequently suffer from class imbalance and weak feature representation, which negatively affects model learning performance for minority fault classes.
 
-\subsection{Problem Statement}
+Furthermore, many machine learning models lack interpretability, making it difficult to understand how gas features influence final predictions \parencite{Laburu2024Insights}.
 
-Based on the research gap, the following problems have been identified:
+These challenges highlight the need for an integrated framework that combines feature optimization, consistent model evaluation, and explainable artificial intelligence techniques \parencite{Hu2025InterpretableEdge}.
 
-\begin{enumerate}
-    \item \textbf{Definition of the Problem:} The problem statement clearly defines the issue that the research aims to address. It should describe the gap in knowledge, real-world challenges, or theoretical inconsistencies that necessitate investigation.
+%====================================================
+\subsection{1.5.2 Research Gap}
 
-    \item \textbf{Relation to Hypotheses:} The problem statement serves as the foundation for formulating hypotheses. It outlines the research issue, while the hypotheses provide testable predictions based on this problem.
+The first research gap is the inconsistency in feature representation across studies, where different approaches use raw gas values, gas ratios, or hybrid features without standardized evaluation.
 
-    \item \textbf{Best Practices for Writing a Problem Statement:}
-    \begin{itemize}
-        \item \textbf{Be clear and concise:} The problem statement should be straightforward, avoiding unnecessary jargon while effectively communicating the research issue.
-        \item \textbf{Explain the research gap:} Clearly identify what is missing in existing research and why addressing this gap is important.
-        \item \textbf{Define the scope:} Specify the boundaries of the problem, ensuring that it is neither too broad nor too narrow.
-        \item \textbf{Highlight significance:} Explain why solving this problem is important, including its potential impact on the field, industry, or society.
-        \item \textbf{Use evidence to support the problem:} Reference previous studies, statistics, or real-world examples to justify why the problem exists and why it requires investigation.
-        \item \textbf{Ensure alignment with research objectives:} The problem statement should align with the study’s aims, ensuring consistency throughout the research process.
-    \end{itemize}
-\end{enumerate}
+The second research gap is the lack of consistent benchmarking across machine learning models, making performance comparison unreliable across studies \parencite{Dladla2025SLR}.
 
+The third research gap is the limited integration of explainable artificial intelligence techniques in DGA-based transformer fault classification, reducing interpretability in engineering applications \parencite{Zhang2022BiLevelXAI}.
 
-\section{Hypotheses of Study}
-Based on the depicted problem statement, the following have been hypothesised:
+%====================================================
+\section{1.6 Hypotheses}
 
-\begin{enumerate}
-    \item \textbf{Hypotheses:} A hypothesis is a testable statement or assumption that predicts the relationship between variables in a study. It serves as the foundation for research by providing a direction for investigation.
+This study is guided by the following hypotheses:
 
-    \item \textbf{Relation to Problem Statement:} The problem statement defines the research issue and its significance, while hypotheses emerge from it as specific, testable propositions. The hypotheses offer potential explanations or solutions to the problem and guide data collection and analysis.
+\begin{itemize}
+\item Different DGA feature sets significantly influence machine learning classification performance.
+\item Traditional machine learning models show varying performance under identical datasets.
+\item Explainable AI techniques can identify the most influential gas features contributing to transformer fault classification.
+\end{itemize}
 
-    \item \textbf{Best Practices for Writing Hypotheses:}
-    \begin{itemize}
-        \item \textbf{Be clear and specific:} A hypothesis should be precise and unambiguous, defining the variables and their expected relationship.
-        \item \textbf{Ensure testability:} A good hypothesis should be measurable and testable using empirical methods.
-        \item \textbf{Base it on existing knowledge:} Formulate hypotheses based on prior research, theories, or observations.
-        \item \textbf{Use an "If-Then" structure (if applicable):} For causal relationships, use an "If X, then Y" format to establish a clear cause-and-effect relationship.
-        \item \textbf{Make it falsifiable:} A hypothesis should be structured in a way that allows it to be proven false if the evidence contradicts it.
-        \item \textbf{Keep it simple and focused:} Avoid overly complex hypotheses by keeping them concise and to the point.
-    \end{itemize}
-\end{enumerate}
+%====================================================
+\section{1.7 Research Objectives}
 
+The objectives of this study are:
 
+\begin{itemize}
+\item To evaluate machine learning models for DGA-based transformer fault classification.
+\item To analyze the impact of different feature sets on classification performance.
+\item To apply explainable artificial intelligence techniques to interpret model predictions.
+\end{itemize}
 
-\section{Research Question}
+%====================================================
+\section{1.8 Scope of Work}
 
-\begin{description}
-    \item[RQ3] - Is there any significant correlation between social presence and course satisfaction among third-year Malaysian undergraduates undertaking a BL course in UMS?
-    \item[RQ4] Is there any significant correlation between cognitive presence and course satisfaction among third-year Malaysian undergraduates undertaking a BL course in UMS?
-    \item[RQ5] Which factor of teaching, social, and cognitive presence is dominant in determining course satisfaction among third-year Malaysian undergraduates undertaking a BL course in UMS?
-\end{description}
+This study focuses on DGA-based transformer fault classification using benchmark datasets containing dissolved gas measurements.
 
-\section{Study Objectives}
+The gases considered include hydrogen, methane, ethane, ethylene, acetylene, carbon monoxide, and carbon dioxide.
 
+The study evaluates traditional machine learning models including SVM, Decision Tree, Random Forest, KNN, and boosting-based methods.
 
+Deep learning approaches, real-time deployment systems, and hardware-level transformer monitoring are excluded from this study.
 
-Based on the hypotheses, the following research objectives have been formulated:
+%====================================================
+\section{1.9 Organisation of Thesis}
 
-\begin{enumerate}    
-    \item  You may refer to online sources about SMART objectives, which define a goal that is specific, measurable, achievable, relevant, and time-bound.
-
-
-       
-
-
-    
-\end{enumerate}
-
-
-
-\section{Scope Of Work}
-
-The scope of work for this thesis are:
-
-\begin{enumerate}    
-    \item Placeholder for scope of work.
-\end{enumerate}
-
-\section{Organisation Of Thesis}
-\label{ThesisOrganisation}
-
-
-\noindent The organisation of this thesis is elaborated in the following:
-
-Chapter 1 serves as an introduction, providing an overview of the study and emphasizing the importance of ... . You may eloborate more
-
-Chapter 2 discusses relevant background information on.. . You may eloborate more
-
-Chapter 3 details the development of the proposed method. You may eloborate more
-
-Chapter 4 presents the experimental analysis and validation of the proposed . You may eloborate more
-
-Chapter 5 summarizes key findings from each chapter, highlights the research contributions of this thesis in advancing.. You may eloborate more
-
-
-The Chapter Appendix includes detailed explanations of the s.
+This thesis is organised into five chapters. Chapter 1 introduces the research background, problem formulation, and objectives. Chapter 2 presents a comprehensive literature review on DGA, machine learning, and explainable artificial intelligence. Chapter 3 describes the methodology including dataset preparation, feature engineering, model development, and evaluation methods. Chapter 4 presents results and discussion, while Chapter 5 concludes the study and provides future recommendations.

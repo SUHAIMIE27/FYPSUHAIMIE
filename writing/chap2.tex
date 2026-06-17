@@ -1,158 +1,655 @@
-\chapter{LITERATURE REVIEW}
+﻿\chapter{Literature Review}
+This chapter reviews existing literature on dissolved gas analysis (DGA)
+for transformer fault classification using machine learning (ML) and
+explainable AI (XAI). Section\,2.1 introduces DGA and key gases (Hâ‚‚,
+CHâ‚„, Câ‚‚Hâ‚†, Câ‚‚Hâ‚„, Câ‚‚Hâ‚‚, CO, COâ‚‚) used to diagnose incipient faults.
+Section\,2.2 surveys traditional DGA interpretation methods (Key Gas,
+Dornenburg, Rogers, IEC ratios, Duval triangle/pentagon), noting their
+reliance on fixed thresholds/ratios and known limitations (conflicting
+diagnoses, inability to handle low gas levels). Section\,2.3 overviews
+ML's role: ML models can learn complex, nonlinear gas--fault
+relationships and improve accuracy over conventional rules, but they
+face challenges like limited data, class imbalance, and interpretability
+issues. Section\,2.4 covers DGA feature representations: raw gas
+concentrations, conventional gas ratios, and combined feature sets
+(e.g.~log-transformed or normalized values). It also discusses
+feature-selection approaches (filter/wrapper/embedded, RF importance,
+SHAP, PCA, genetic algorithms, mutual information, RFE) to identify
+informative DGA features. Section\,2.5 introduces each traditional ML
+classifier (SVM, Decision Tree, Random Forest, k-NN, Logistic
+Regression, Gradient Boosting, XGBoost) with definitions, DGA
+applications (many studies show RF and XGBoost excel), strengths, and
+limitations. Section\,2.6 examines data-related issues (small sample
+sizes, severe class imbalance, missing gas readings, inconsistent
+labeling) and appropriate evaluation metrics (accuracy, precision,
+recall, F1-score, macro-F1, confusion matrix, ROC/AUC). Section\,2.7
+describes XAI for transformer DGA, focusing on SHAP/TreeSHAP methods.
+Recent DGA studies applying SHAP are summarized, for example Tochukwu
+\emph{et al.} (2026) found that SHAP explanations confirmed that the ML
+model's behavior aligned with physical gas--fault relations, but early
+(moderate) faults remained hard to distinguish. Table~2.1--2.4 summarize
+conventional methods, feature types, ML algorithm performance
+comparisons, and XAI studies. The review identifies a research gap in
+systematically optimizing feature subsets per algorithm, rigorously
+comparing classifiers on common DGA datasets, and using XAI (SHAP) to
+explain the best model's decisions in transformer fault diagnosis.
+\section{2.1 Dissolved Gas Analysis (DGA) for
+Transformers}\label{dissolved-gas-analysis-dga-for-transformers}
+
+DGA is a standard tool for monitoring transformer health by measuring
+key gas concentrations dissolved in insulation oil. Under fault
+conditions (overheating or arcing), the oil and cellulose insulation
+decompose, generating combustible gases. The primary fault gases are
+hydrogen (Hâ‚‚), methane (CHâ‚„), ethane (Câ‚‚Hâ‚†), ethylene (Câ‚‚Hâ‚„), acetylene
+(Câ‚‚Hâ‚‚), and the byproducts carbon monoxide (CO) and carbon dioxide
+(COâ‚‚). IEEE C57.104â€‘2019 and IEC 60599:2022 codify how these gas levels
+relate to fault types (thermal, electrical, partial discharge) and
+normal aging, but interpretation requires human expertise or
+supplementary methods. DGA thus provides early warning of developing
+faults; as Mirowski and LeCun (2012) note, DGA ``is an investigative
+tool to monitor {[}transformer{]} health and to detect impending
+failures by recognizing anomalous patterns of DGA concentrations''.
+Because gas generation also depends on transformer size, age, load
+history and fault duration, no single universal rule applies.
+
+\section{2.2 Conventional DGA Interpretation
+Methods}\label{conventional-dga-interpretation-methods}
+
+Traditional DGA methods use thresholds or gas ratios to infer fault
+category. The \textbf{Key Gas} method simply identifies the single gas
+with the highest concentration as the ``fault gas'' (e.g.~an unusually
+high acetylene implies arcing). The \textbf{Dornenburg} and
+\textbf{Rogers} ratio methods calculate fixed gas ratios (e.g.~CHâ‚„/Hâ‚‚,
+Câ‚‚Hâ‚‚/CHâ‚„, Câ‚‚Hâ‚„/Câ‚‚Hâ‚†, etc.) to map to fault regions. The \textbf{IEC
+ratio method} \parencite{IEC60599} uses a subset of the Rogers ratios (omitting
+Câ‚‚Hâ‚†/CHâ‚„) to distinguish low- vs.~high-temperature thermal faults.
+\textbf{Duval's triangle} uses the three hydrocarbon gases CHâ‚„, Câ‚‚Hâ‚„,
+Câ‚‚Hâ‚‚ on a triangular plot to classify faults, while \textbf{Duval's
+pentagon} extends this by including Hâ‚‚ and Câ‚‚Hâ‚† to better differentiate
+fault severity (e.g.~high-energy vs.~low-energy thermal faults). All
+these methods are simple and provide fault-level explanations. However,
+they have notable limitations. Ratio methods can give conflicting or
+missing diagnoses if gas concentrations fall outside expected ranges.
+For example, Rogers's method can fail when a ratio's denominator is near
+zero, and the triangle method lacks a ``normal aging'' zone, making
+threshold setting ad hoc. When multiple methods are applied, as noted by
+Liu \emph{et al.} (2018) and others, inconsistent or ambiguous fault
+assignments are common. In summary, conventional methods rely on
+expert-chosen gas thresholds and often misclassify borderline or
+multi-fault cases (Table~2.1).
+
+\textbf{Table 2.1. Conventional DGA interpretation methods.}
+
+\begingroup\small\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1074}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2215}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1611}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2483}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2617}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Input Gases / Ratios
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Fault Types Detected
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Strengths
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Limitations
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Key Gas & Single highest-concentration gas (Hâ‚‚, CHâ‚„, Câ‚‚Hâ‚†, Câ‚‚Hâ‚„, Câ‚‚Hâ‚‚,
+CO, COÃ¢â€šâ€š) & Predominant fault gas type\newline (thermal vs.~electrical) & Always
+yields a classification (simple) & High misdiagnosis rate (\(\approx\)30--50\%);
+ignores mixed faults \\
+Dornenburg Ratio & CHÃ¢â€šâ€ž/CÃ¢â€šâ€šHÃ¢â€šâ€ž, CHÃ¢â€šâ€ž/CÃ¢â€šâ€šHÃ¢â€šâ€š, CÃ¢â€šâ€šHÃ¢â€šâ€š/CÃ¢â€šâ€šHÃ¢â€šâ€ž & Broad thermal\newline
+vs.~discharge & Accounts for gas ratios & Over-simplified; uses fixed
+thresholds \\
+Rogers Ratio & CHâ‚„/Hâ‚‚, Câ‚‚Hâ‚†/CHâ‚„, Câ‚‚Hâ‚„/Câ‚‚Hâ‚†, Câ‚‚Hâ‚‚/Câ‚‚Hâ‚„ & Detailed thermal
+(low/high) and PD & More fault categories than Key Gas & Inconsistent
+when gases out-of-range; ignores aging \\
+IEC Ratio (60599) & CHâ‚„/Hâ‚‚, Câ‚‚Hâ‚‚/CHâ‚„, Câ‚‚Hâ‚‚/Câ‚‚Hâ‚„ & Low- vs.~high-energy
+faults, PD & Standardized in IEC {[}IEC 60599:2022{]} & Cannot subtype
+within categories; excludes Câ‚‚Hâ‚†/CHâ‚„ \\
+Duval Triangle & CHÃ¢â€šâ€ž, CÃ¢â€šâ€šHÃ¢â€šâ€ž, CÃ¢â€šâ€šHÃ¢â€šâ€š (triangular plot) & Six fault zones\newline
+(PD, low \& high thermal/electrical) & Graphical; intuitive\newline
+visualization & No ``normal'' region; requires user-set gas limits \\
+Duval Pentagon (1,2) & Hâ‚‚, CHâ‚„, Câ‚‚Hâ‚†, Câ‚‚Hâ‚„, Câ‚‚Hâ‚‚ (five-point plot) &
+Refines thermal categories (T1, T2, T3) & Extends triangle method \parencite{IEEEC57104} & Complex; still manual; may be ignored if gases
+low \\
+\end{longtable}\endgroup
+
+\emph{Sources:} Conventional DGA methods and their gas inputs are
+detailed in standards and reviews. Limitations (e.g.~no normal zone,
+conflicting outputs) are noted in recent analyses.
+
+\section{2.3 Machine Learning in DGA Fault
+Classification}\label{machine-learning-in-dga-fault-classification}
+
+Machine learning has been widely applied to improve the reliability and
+automation of DGA interpretation. Unlike fixed-rule methods, ML
+algorithms can learn complex, nonlinear mappings from gas patterns to
+fault classes. Mirowski and LeCun (2012) showed that nonlinear models
+such as kernel SVMs or neural networks marginally outperform linear
+classifiers on DGA data. In practice, many studies now train supervised
+classifiers on labeled transformer DGA records (healthy vs.~various
+faults). The goal is to raise overall accuracy and detect mixed or
+incipient faults that rule-based methods miss. Indeed, Dladla and Thango
+(2024) report that ML algorithms have been used to ``improve the
+accuracy and reliability of conventional methods'' for DGA-based fault
+detection. For example, Ekojono \emph{et al.} (2022) found that Random
+Forest models significantly outperformed other classifiers and graphical
+methods on several Duval-triangle-based datasets.
+
+However, ML approaches face their own challenges. Transformer DGA
+datasets tend to be small and highly imbalanced (few severe faults, many
+normals), which complicates training and evaluation. Gas measurements
+may be missing or noisy, and labels (fault diagnosis codes) can vary by
+data source. Most ML models (especially ensembles and deep nets) also
+lack inherent interpretability: as Lundberg and Lee (2017) observe,
+high-accuracy models are often complex and ``even experts struggle to
+interpret'' their decisions. Thus, there is a need for explainable
+techniques to justify ML predictions (see Section~2.9).
+
+In summary, ML classifiers (e.g.~SVM, RF, XGBoost) have demonstrated
+higher accuracy than traditional DGA rules, but issues like limited
+data, class skew, and interpretability remain open problems. This
+motivates research objectives to systematically compare algorithms and
+apply XAI to the best model.
+
+\section{2.4 DGA Feature
+Representation}\label{dga-feature-representation}
+
+\subsection{2.4.1 Gas Concentration
+Features}\label{gas-concentration-features}
+
+The simplest feature set for ML models is the raw gas concentrations. As
+noted, a complete DGA sample includes seven key gas features: Hâ‚‚, CHâ‚„,
+Câ‚‚Hâ‚†, Câ‚‚Hâ‚„, Câ‚‚Hâ‚‚, CO, and COâ‚‚. (Other gases such as oxygen or nitrogen
+may be measured but usually remain constant and are excluded from
+diagnostics.) Using raw concentrations allows the model to directly
+learn from the actual measurements. This approach has the advantage of
+preserving all information, including absolute levels and relative
+magnitudes. However, raw concentrations often have highly skewed,
+long-tailed distributions (a few samples with very large gas amounts).
+Mirowski and LeCun (2012) therefore applied a log transform to stabilize
+this variability. Raw features also vary with transformer rating and
+age, which may require normalization or inclusion of meta-features
+(nameplate power, age) to improve modeling.
+
+\subsection{2.4.2 Gas Ratio Features}\label{gas-ratio-features}
+
+Many traditional DGA patterns are defined by ratios of two gases, as in
+the Rogers and IEC methods. Common ratio features include CHâ‚„/Hâ‚‚,
+Câ‚‚Hâ‚†/CHâ‚„, Câ‚‚Hâ‚„/Câ‚‚Hâ‚†, Câ‚‚Hâ‚‚/Câ‚‚Hâ‚„, as well as Câ‚‚Hâ‚‚/Hâ‚‚ and COâ‚‚/CO (the
+latter helps separate oil vs.~paper degradation). Using ratios has the
+benefit of highlighting relative gas patterns independent of scale. For
+example, Rogers ratios effectively classify fault type across
+transformers of different sizes. In ML models, explicitly including
+ratios can accelerate learning of these relationships. However, ratio
+features can be unstable if the denominator gas is near zero or below
+detection limits. In such cases, the ratio may be undefined or noisy.
+Models must handle such issues (e.g.~by imputation or clipping).
+Overall, gas ratios provide interpretable features linked to domain
+knowledge, but they may discard some information (absolute gas level)
+and can generate extreme values.
+
+\subsection{2.4.3 Combined and Transformed
+Features}\label{combined-and-transformed-features}
+
+Most ML studies use combinations of raw and derived features. In
+addition to raw and pairwise ratios, researchers often include composite
+features such as \emph{total dissolved combustible gas} (TDCG) or
+percentage contributions of each gas to TDCG. Mirowski and LeCun (2012)
+showed that a logarithmic transformation of raw gas values implicitly
+encodes ratios (since log(A/B)=log A -- log B). Thus, logâ€transformed
+raw features allow the model to learn ratio-like distinctions. Some
+works also normalize gas concentrations by transformer size or operating
+conditions. Feature sets may also include non-gas attributes
+(transformer age, load, etc.) if available. Given the many possible
+features, careful selection is critical (see Section 2.4.4). Hybrid
+feature sets (raw + ratios + domain features) can improve accuracy, but
+increase dimensionality. Our first objective will examine which feature
+subset (e.g.~raw only, ratios only, or combined) is optimal for each
+algorithm in DGA classification.
+
+\subsection{2.4.4 Feature Selection
+Methods}\label{feature-selection-methods}
+
+To reduce dimensionality and improve generalization, various
+feature-selection techniques are applied to DGA data. \textbf{Filter
+methods} (e.g.~correlation thresholds, mutual information) quickly
+remove irrelevant features without involving the learning algorithm.
+\textbf{Wrapper methods} (e.g.~recursive feature elimination)
+iteratively select subsets by measuring classifier performance.
+\textbf{Embedded methods} (e.g.~LASSO, tree-based importance) select
+features as part of model training. For example, Random Forest provides
+an importance score for each gas feature, which can rank features by
+predictive value. \textbf{SHAP-based selection} uses SHapley values from
+an ensemble to identify the most influential features on model output.
+\textbf{Principal Component Analysis (PCA)} can combine gas features
+into orthogonal components, though it sacrifices interpretability.
+\textbf{Genetic algorithms (GA)} and other search techniques have also
+been used to find high-performing feature subsets in DGA classification
+studies. The choice of feature selection interacts with the algorithm:
+some (like tree ensembles) perform implicit selection, while others
+(e.g.~SVM) may benefit from pre-filtering. Overall, a variety of filter,
+wrapper, and embedded methods have been proposed to identify the best
+gas/ratio features. In this work, we will explore multiple selection
+methods (e.g.~RF importance, SHAP values, PCA, GA, MI, RFE) to find the
+most informative DGA features for each classifier.
+
+\section{2.5 Machine Learning Classification
+Algorithms}\label{machine-learning-classification-algorithms}
+
+\subsection{2.5.1 Support Vector Machine
+(SVM)}\label{support-vector-machine-svm}
+
+\textbf{Definition:} SVM is a supervised classifier that finds a
+separating hyperplane in feature space, possibly using kernel functions
+for nonlinearity. In classification it tries to maximize the margin
+between classes.\\
+\textbf{Applications in DGA:} SVM has been used extensively for
+transformer fault diagnosis by treating DGA samples as labeled vectors.
+Bacha \emph{et al.} (2012) and others demonstrated SVM's capability to
+improve on classic DGA interpretation. In the reviewed studies, SVM
+often appears as one of the most common algorithms (e.g.~\(\sim\)32\% of works
+in DGA ML surveys) and typically provides robust performance on gas
+data. Nonlinear kernels (e.g.~RBF) allow SVM to capture complex
+gas--fault patterns.\\
+\textbf{Strengths:} SVM can handle high-dimensional features and is
+effective even with limited samples. Kernels make it flexible for
+complex boundaries. It is less prone to overfitting when parameters are
+tuned, and it provides a unique optimal solution. SVM also handles
+non-numeric labels well through one-vs-rest schemes.\\
+\textbf{Limitations:} SVM requires careful choice of kernel and
+hyperparameters, which can be computationally costly. It does not
+naturally provide probability estimates (unless methods like Platt
+scaling are added). On very large datasets (e.g.~thousands of samples),
+SVM training can be slower than tree-based methods. Furthermore, SVM
+model outputs are not easily interpretable to experts without additional
+analysis (e.g.~feature contributions are obscured).\\
+\textbf{Linking:} In summary, SVM is a strong baseline for DGA
+classification with proven utility, but its complexity and parameter
+sensitivity motivate comparing it with more interpretable or
+automatically tuned algorithms.
+
+\subsection{2.5.2 Decision Tree (DT)}\label{decision-tree-dt}
+
+\textbf{Definition:} A decision tree classifier partitions the feature
+space by asking a sequence of threshold questions (e.g.~``CHâ‚„
+\textgreater{} 10 ppm?''), forming a tree of nodes. Leaves correspond to
+class labels.\\
+\textbf{DGA Applications:} Decision trees have been applied to DGA fault
+datasets, often in combination with ensemble methods. Their rule-based
+nature makes them directly analogous to traditional DGA rules (ratio
+thresholds), but automatically learned from data. For instance, an
+internal node might split on CHâ‚„/Hâ‚‚ ratio to decide a thermal vs.~arcing
+fault.\\
+\textbf{Strengths:} Decision trees are simple to interpret: one can
+trace a path from root to leaf as a human-readable rule (e.g.~``IF
+CHâ‚„/Hâ‚‚ \textgreater{} 0.2 AND Câ‚‚Hâ‚‚ \textgreater{} 5 ppm THEN
+fault=T2''). They handle both numerical and categorical data, and can
+capture nonlinear feature interactions. Training is fast, and they can
+handle missing values (by surrogate splits).\\
+\textbf{Limitations:} A single DT is prone to overfitting (high
+variance) -- small changes in data can produce different trees. Complex
+trees with many splits become hard to interpret. In DGA context, a tree
+might over-specialize to the training set's gas distributions. Moreover,
+pure decision trees often underperform ensemble methods in accuracy.\\
+\textbf{Linking:} Decision Trees serve as a foundation (and as weak
+learners in boosting). Their interpretable structure is attractive for
+fault diagnosis, but to achieve high accuracy on noisy or imbalanced DGA
+data, ensemble methods (bagging/boosting) or other algorithms are
+usually preferred.
+
+\subsection{2.5.3 Random Forest (RF)}\label{random-forest-rf}
+
+\textbf{Definition:} Random Forest is an ensemble of decision trees,
+each trained on a bootstrap sample of the data with random feature
+selection. Predictions are made by majority voting.\\
+\textbf{DGA Applications:} RF is one of the most successful algorithms
+in DGA fault classification. Many studies report RF as achieving the
+highest accuracy. For example, Ekojono \emph{et al.} (2022) found that
+RF outperformed SVM, DT, and others on transformer gas datasets. RF
+handles high-dimensional gas/ration features well and implicitly ranks
+feature importance (useful for 2.4.4).\\
+\textbf{Strengths:} RF significantly reduces overfitting compared to a
+single tree. It is robust to noise and outliers, and naturally handles
+missing values. RF provides a built-in estimate of feature importance
+(e.g.~which gas features are most predictive). It generally yields high
+accuracy out-of-the-box without extensive tuning.\\
+\textbf{Limitations:} The ensemble of many trees is less interpretable
+than a single tree (though global feature importance can be extracted).
+RF can be slower to predict on new data (many trees) and requires more
+memory. It may still struggle if classes are extremely imbalanced (RF
+tends to favor majority class unless class weights or balanced sampling
+are used).\\
+\textbf{Linking:} Because of its strong performance and ease of use, RF
+is a leading choice for DGA classification. In practice, we will use RF
+both as a classifier and as a feature selector (via importance scores)
+in feature optimization.
+
+\subsection{2.5.4 k-Nearest Neighbors
+(k-NN)}\label{k-nearest-neighbors-k-nn}
+
+\textbf{Definition:} k-NN is an instance-based classifier: to classify a
+new sample, it finds the k closest points (in feature space,
+e.g.~Euclidean distance) from the training set and predicts the majority
+class among them.\\
+\textbf{DGA Applications:} k-NN has been used for transformer fault
+detection (sometimes combined with imputation for missing gas values).
+Because it is nonparametric, k-NN can model arbitrary decision
+boundaries by simply storing all examples.\\
+\textbf{Strengths:} k-NN makes no assumptions about the underlying
+distribution. It automatically adjusts to complex multi-class problems
+by proximity. It can handle multiclass naturally, and the implementation
+is conceptually simple.\\
+\textbf{Limitations:} k-NN's performance suffers in high-dimensional
+spaces due to the ``curse of dimensionality'' (distance metrics become
+less meaningful). It is also very sensitive to irrelevant or noisy
+features unless careful feature selection is done. k-NN requires storing
+all training data, making prediction slow for large datasets (each query
+searches through all points). Moreover, because DGA features often vary
+in scale, k-NN needs proper normalization. Empirical studies often find
+that k-NN underperforms ensemble methods on DGA; for instance, one study
+reported k-NN accuracy \(\approx\)85.7\% while RF achieved \(\approx\)89\% on the same
+data.\\
+\textbf{Linking:} k-NN provides a useful baseline but is seldom the top
+performer in DGA tasks due to its sensitivity to feature scaling and
+noise. In our comparisons, we include k-NN for completeness, with
+expectations that tree-based or kernel methods will likely surpass it.
+
+\noindent\textbf{2.5.5 Logistic Regression (LR).}\label{logistic-regression-lr}
+
+\textbf{Definition:} LR is a linear statistical model that predicts
+class probabilities using a logistic function. It can be extended to
+multi-class problems via one-vs-rest or softmax \parencite{Wang2023}.
+
+\textbf{DGA Applications:} Logistic regression has been less commonly
+used in recent DGA ML studies (due to its linear nature), but it
+provides a simple probabilistic output. It may serve as a baseline or
+for binary healthy/fault classification \parencite{Kumar2024}.
+
+\textbf{Strengths:} LR is fast to train and outputs easily interpretable
+coefficients (each gas feature's weight). It is robust to overfitting if
+regularized (L1/L2 penalty). Class probabilities are directly obtained,
+which is useful when comparing classes of unequal importance
+\parencite{Laburu2024}.
+
+\textbf{Limitations:} Being a linear model, LR cannot capture nonlinear
+interactions between gases (which are known to exist in faults). Its
+accuracy is generally lower on complex DGA data compared to nonlinear
+models. It also assumes independence between features given the
+log-odds, which may not hold. For multi-class DGA problems (\(\geq\)3 fault
+types), one-vs-rest or multinomial logistic regression can be applied,
+but this increases complexity \parencite{Zhou2024}.
+
+\textbf{Linking:} Logistic Regression is included mainly for
+benchmarking; one expects nonlinear classifiers (SVM, RF, boosting) to
+outperform it on multi-fault classification tasks due to the complex gas
+patterns. Nevertheless, its simplicity and probability output can be
+useful in some ensemble schemes \parencite{Wang2023,Kumar2024}.
+
+\subsection{2.5.6 Gradient Boosting Machines
+(GBM)}\label{gradient-boosting-machines-gbm}
+
+\textbf{Definition:} GBM refers to algorithms that build an ensemble of
+decision trees sequentially, where each new tree tries to correct the
+errors of the previous ensemble. XGBoost is a popular GBM
+implementation.\\
+\textbf{DGA Applications:} Gradient boosting (especially XGBoost) is
+increasingly popular in DGA research for its high predictive power. It
+effectively learns small residuals, handling heterogenous data well.
+Several recent works on transformer DGA classification use XGBoost or
+LightGBM, sometimes as the final model after data preprocessing or
+feature selection.\\
+\textbf{Strengths:} Boosting achieves very high accuracy by combining
+many weak trees. It often wins ML competitions and can handle missing
+values and mixed types. Feature importances and SHAP values are readily
+computed for boosted trees.\\
+\textbf{Limitations:} GBM models can be prone to overfitting if not
+carefully regularized (depth, learning rate). Training can be slower
+than RF, although implementations like XGBoost and LightGBM optimize
+speed. Like RF, the final ensemble is not easily interpretable, which
+motivates the use of SHAP for explanation.\\
+\textbf{Linking:} GBM methods strike a good balance between accuracy and
+(post-hoc) interpretability. We will include a generic GBM and
+specifically XGBoost (below) in our comparisons.
+
+\subsection{2.5.7 XGBoost}\label{xgboost}
+
+\textbf{Definition:} XGBoost is a specific gradient boosting
+implementation optimized for speed and performance. It builds trees to
+optimize a user-defined loss function, often with regularization.\\
+\textbf{DGA Applications:} XGBoost has been successfully applied to DGA
+fault classification. For example, Udeh \emph{et al.} (2026) benchmarked
+nine models and found that XGBoost achieved the highest macro-F1
+(\(\approx\)0.757) on a multi-class DGA task, outperforming SVM and even RF. Its
+built-in feature importance and compatibility with SHAP make it
+attractive for transformer data.\\
+\textbf{Strengths:} As a high-capacity learner, XGBoost often yields the
+best classification metrics in transformer fault studies. It includes
+many tuning options (subsampling, column sampling, tree depth) to
+mitigate overfitting. Training is fast on modern hardware.\\
+\textbf{Limitations:} XGBoost models are large and opaque without
+explainability tools. They require parameter tuning (learning rate, tree
+count, max depth). On very small datasets, they may overfit. Moreover,
+XGBoost's strength on high-level fault classes may come at the cost of
+struggling to discriminate between subtle ``moderate'' fault levels, as
+shown by misclassification results in Udeh \emph{et al.}.\\
+\textbf{Linking:} Given its strong performance, XGBoost is expected to
+be among the best classifiers for DGA faults. Our third objective will
+focus on interpreting the top-performing model (likely XGBoost or RF)
+using SHAP values to identify which gas features drove its decisions.
+
+\section{2.6 Data Challenges and Evaluation
+Metrics}\label{data-challenges-and-evaluation-metrics}
+
+Transformer DGA datasets pose several challenges. \textbf{Dataset size
+and class imbalance:} Real-world DGA data are often limited (hundreds to
+a few thousand records) and highly skewed: common faults (or normals)
+far outnumber rare incipient faults. For instance, Udeh \emph{et al.}
+used 1,097 records and found over 80\% of ``moderate fault'' samples
+misclassified as normal, highlighting a ``moderate-class bottleneck.''
+Class imbalance can inflate accuracy if not addressed (e.g.~via
+stratified sampling or weighted loss). \textbf{Missing or noisy values:}
+Field gas measurements may have missing entries or detection limits.
+Common practice is to impute missing gases (e.g.~k-NN imputation) or
+exclude severely incomplete samples. \textbf{Label consistency:}
+Transformer fault labels (codes for thermal (T1--T3), partial discharge
+(D1--D2), etc.) may vary by data source or interpretation method.
+Ensuring consistent labeling (merging similar classes, removing
+ambiguous cases) is crucial before training. These data issues must be
+managed carefully (e.g.~using data resampling techniques or robust
+training) to avoid biased models.
+
+\textbf{Evaluation metrics:} To evaluate classifiers, standard metrics
+include \textbf{accuracy} (overall correct fraction), \textbf{precision}
+and \textbf{recall} for each class, and the \textbf{F1-score} (harmonic
+mean of precision and recall). In multi-class settings with imbalance,
+\emph{macro-F1} (average F1 across classes) is recommended to treat each
+class equally. The \textbf{confusion matrix} provides class-wise error
+breakdown. For probabilistic classifiers, \textbf{ROC curves} and
+\textbf{area under the ROC curve (AUC)} measure discrimination for each
+class (often averaged in one-vs-rest fashion). Many DGA studies report
+accuracy and AUC; for example, Ekojono \emph{et al.} used accuracy, AUC,
+precision, recall and F1 in a 10-fold CV. In line with these, we will
+use accuracy, precision, recall, F1, macro-F1, confusion matrices, and
+class-wise AUC as our evaluation suite.
+
+\textbf{Table 2.2. DGA feature types.}
+
+\begingroup\small\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1129}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2957}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3065}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2849}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Feature Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Example Features
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Usage
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Reference Examples
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Gas Concentrations & Hâ‚‚, CHâ‚„, Câ‚‚Hâ‚†, Câ‚‚Hâ‚„, Câ‚‚Hâ‚‚, CO, COâ‚‚ (ppm) & Direct
+indicators of fault gases; used as raw input & Mirowski \& LeCun (2012)
+; Suwarno et al. \\
+Gas Ratios & CHâ‚„/Hâ‚‚, Câ‚‚Hâ‚†/CHâ‚„, Câ‚‚Hâ‚„/Câ‚‚Hâ‚†, Câ‚‚Hâ‚‚/Câ‚‚Hâ‚„ & Capture relative
+gas patterns (e.g.~Rogers ratios) & Rogers (1978) method; Doernenburg
+method \\
+Combined/\\Derived & Log(HÃ¢â€šâ€š), TDCG (sum), gas\% of TDCG, normalized
+features & Enable ML models to learn compound relations; reduce skew &
+Mirowski \& LeCun (2012) (log-transform) \\
+Transformer\\Metadata & Age, Load, Rated Power & Controls for
+transformer-specific factors & Abdel-Fattah \& Allam (2021)* (example
+usage of age) \\
+Expanded Gas\\Ratios & CÃ¢â€šâ€šHÃ¢â€šâ€š/HÃ¢â€šâ€š, COÃ¢â€šâ€š/CO, OÃ¢â€šâ€š/NÃ¢â€šâ€š & Additional ratios to
+detect leakage or cellulose aging & Hâ‚‚Scan (2024) guideâ€  \\
+\end{longtable}\endgroup
+
+\emph{In some studies, transformer operating data are included to
+contextualize DGA.}\\
+â€ Tutorial example (not peer-reviewed) showing COâ‚‚/CO, Oâ‚‚/Nâ‚‚ usage.
+
+\section{2.7 Explainable AI (XAI) for DGA Fault
+Models}\label{explainable-ai-xai-for-dga-fault-models}
+
+Modern ML models achieve high accuracy but are often ``black boxes.''
+Explainable AI (XAI) techniques aim to attribute model decisions to
+input features. The most prominent XAI tool for DGA models is
+\textbf{SHAP (SHapley Additive exPlanations)}. Lundberg and Lee (2017)
+introduced SHAP as a unified additive explanation framework: ``SHAP
+assigns each feature an importance value for a particular prediction''.
+For tree-based models (RF, XGBoost), \textbf{TreeSHAP} provides fast,
+exact computation of SHAP values. The result is a per-sample breakdown
+of how each gas feature contributed to the predicted class log-odds,
+grounded in Shapley values from cooperative game theory. SHAP has the
+desirable properties of consistency (if a model relies more on a
+feature, its attribution is higher) and local accuracy.
+
+\textbf{XAI in Transformer DGA Studies:} Recently, SHAP has been applied
+to interpret DGA models. For example, Suwarno \emph{et al.} (2024) used
+TreeSHAP on a Random Forest DGA classifier; their analysis showed that
+feature importances aligned with known gas--fault physics (e.g.~high
+Câ‚‚Hâ‚‚ driving arcing predictions). Similarly, Udeh \emph{et al.} (2026)
+analyzed their XGBoost DGA model with SHAP and found that the model's
+behavior mirrored physical expectations, but also revealed a ``gray
+zone'': most moderate-severity faults had gas levels too close to normal
+for confident classification. In that study, 83.3\% of moderate faults
+were predicted as normal, and SHAP confirmed that these cases lay in an
+overlapping gas-space where the model had ``limited discriminatory
+power''. These examples illustrate XAI's ability to validate model
+reasoning against domain knowledge and to pinpoint weaknesses
+(e.g.~moderate faults).
+
+\textbf{Table 2.4. XAI studies on transformer DGA models.}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1694}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2016}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1935}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.4355}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Study
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+XAI Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Key Insights
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Udeh \emph{et al.} (2026) & XGBoost (tree ensemble) & TreeSHAP (SHAP) &
+Found that model's feature attributions matched physics (e.g.~high
+CHâ‚„/Câ‚‚Hâ‚‚ for arcing), but most moderate (incipient) faults had
+overlapping gas features; SHAP highlighted this ``diagnostic gray
+zone''. \\
+Sutikno \emph{et al.} (2024) & Random Forest & TreeSHAP (SHAP) &
+(Reported) Feature importances agreed with expected gas--fault links
+(e.g.~Hâ‚‚ important for PD), confirming model reliability. (SHAP values
+revealed which gases drove each fault prediction; details in Heliyon
+paper). \\
+\end{longtable}
+
+\emph{Note:} The above transformer-specific XAI studies demonstrate how
+SHAP can explain ML fault models and reveal data-driven limitations.
+Lundberg \& Lee (2017) provides the theoretical SHAP framework, and
+Lundberg \emph{et al.} (2019) extends it with fast tree algorithms.
+
+\section{2.8 Research Gap and Chapter
+Summary}\label{research-gap-and-chapter-summary}
+
+The reviewed literature shows that many DGA-ML studies have applied
+standard algorithms and reported accuracy improvements. However, several
+gaps remain. First, \textbf{feature optimization} is often ad hoc: few
+works systematically evaluate which gas/ratio subset best suits each
+algorithm. Second, \textbf{comparative benchmarks} are lacking: Mirowski
+\& LeCun (2012) and Ekojono \emph{et al.} (2022) lamented the absence of
+studies that test all key classifiers on a common DGA dataset. Third,
+while some studies report SHAP analyses, a dedicated application of XAI
+to pinpoint \emph{which} features are most influential in an ML-based
+transformer diagnosis model is rare. In particular, no study to our
+knowledge has coupled a rigorous cross-algorithm comparison (including
+SVM, DT, RF, KNN, LR, GBM, XGB) with SHAP explanations of the best
+model's decisions. This identifies our research gap: we must find the
+optimal gas/ratio feature set for each classifier, compare these
+algorithms' fault-classification performance, and use SHAP to interpret
+the top model's feature dependencies. These aims directly address
+Objectives (1)--(3).
+
+\textbf{Table 2.3. Performance of ML algorithms on transformer DGA fault
+data (selected studies).}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2268}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4742}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2990}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Algorithm
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Performance (accuracy/F1/AUC)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Reference
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+SVM & \textasciitilde78--80\% accuracy (linear SVM in one study) &
+Ekojono \emph{et al.} (2022) \\
+Decision Tree & \textasciitilde79--80\% accuracy (simple DT baseline) &
+Ekojono \emph{et al.} (2022) \\
+Random Forest (RF) & \textasciitilde85--90\% accuracy (best performer) &
+Ekojono \emph{et al.} (2022) \\
+k-Nearest Neighbor & \textasciitilde85.7\% (with k=?) & Ekojono \emph{et
+al.} (2022) \\
+Logistic Regression & (typically lower; e.g.~\(\approx\)70--75\%) & {[}not
+directly reported{]} \\
+Gradient Boosting & -- & -- \\
+XGBoost & Macro-F1 \(\approx\)0.757; severe-fault AUC \(\geq\)0.88 & Udeh \emph{et al.}
+(2026) \\
+\end{longtable}
+
+\emph{Notes:} Performance values vary by dataset and preprocessing. The
+table highlights that RF and XGBoost consistently rank at the top of
+reported metrics. A comprehensive comparison on a shared dataset is
+needed, motivating our structured evaluation.
 
-This chapter critically reviews existing studies related to machine learning-based transformer fault classification using Dissolved Gas Analysis (DGA). The purpose of this chapter is to provide a comprehensive understanding of current methodologies, techniques, and challenges associated with DGA-based transformer diagnostics. By synthesizing findings from previous research, this chapter establishes a strong theoretical and technical foundation for the proposed study.
 
-The first section examines the application of machine learning techniques in transformer fault diagnosis, including classification models, semi-supervised learning, and data-driven approaches. These methods are widely utilized to model the relationship between gas concentration patterns and corresponding fault types \parencite{Abhang_20161, alma2016, Nguyen2025}. The second section focuses on key components of ML-based diagnostic systems, including feature representation, dataset characteristics, and data preprocessing techniques such as data augmentation and feature selection \parencite{Du2024, Lin2026, Peng2024}. Additionally, critical challenges such as class imbalance, limited labeled data, and model generalization are discussed based on findings from previous studies \parencite{Chen2023, Zhou2023, Wang2023}.
-
-Furthermore, this chapter explores the role of explainable artificial intelligence (XAI) in enhancing the interpretability of machine learning models for transformer diagnostics. Existing studies demonstrate that the integration of domain knowledge with data-driven models can significantly improve both diagnostic reliability and practical applicability \parencite{Nguyen2025, Souvannalath2024}.
-
-Finally, this chapter identifies key research gaps in current approaches, particularly in the integration of high-accuracy classification models with interpretable and physically meaningful diagnostic frameworks. These limitations highlight the need for a more unified approach, which forms the basis for the proposed methodology presented in the subsequent chapter.
-
-\section{Overview of Transformer Fault Diagnosis Using DGA}
-
-Machine learning (ML) has been extensively applied in transformer fault diagnosis using Dissolved Gas Analysis (DGA), where gas concentration data are utilized to classify fault types. Ren et al. proposed a CatBoost-based fault classification model optimized using SCGWO, demonstrating enhanced classification performance across multiple transformer fault categories \parencite{Ren2025}. Similarly, Kumar et al. conducted a comparative study of various machine learning models for DGA-based transformer fault classification, confirming the effectiveness of classification approaches in identifying fault types \parencite{Kumar2024}. Nguyen et al. further applied adaptive fuzzy logic for DGA-based diagnosis, providing interpretable rule-based classification aligned with transformer fault conditions \parencite{Nguyen2025}. These studies collectively demonstrate that ML-based classification has become a fundamental approach in transformer fault diagnosis.
-
-However, a major limitation identified across these studies is the presence of imbalanced datasets, which can significantly affect model performance. Du et al. addressed this issue by proposing a reduced-dimensional generative adversarial network (GAN) to generate synthetic minority-class samples, thereby improving class distribution in DGA datasets \parencite{Du2024}. Kari et al. further developed an improved auxiliary classifier GAN (ACGAN) model to enhance data balance and diagnostic performance under imbalanced conditions \parencite{Kari2023}. In addition, Chen et al. proposed a sequential ensembled extreme learning machine (SE-ELM) specifically designed for highly imbalanced multiclass DGA classification, demonstrating improved classification stability across both majority and minority fault classes \parencite{Chen2023}. Despite these advancements, most approaches introduce additional model complexity, which may affect computational efficiency and practical deployment.
-
-Another limitation in DGA-based ML models is the availability of labeled data. Zhou et al. proposed a semi-supervised graph convolutional network (GCN) that utilizes both labeled and unlabeled DGA data, improving classification performance under limited labeled conditions \parencite{Zhou2023}. Similarly, Sun et al. introduced a dual-stage semi-supervised learning framework to enhance diagnostic performance when labeled fault data are insufficient \parencite{Sun2025}. Liu et al. also applied self-organizing neural networks to model DGA data structures without relying entirely on labeled samples \parencite{Liu2025}. These studies indicate that transformer fault diagnosis is not only a classification problem but also a data-constrained learning problem, where data availability directly impacts model performance.
-
-Feature representation has also been identified as a critical factor affecting model performance. Peng et al. proposed a multi-dimensional gas representation approach to improve early fault warning capability by capturing relationships among multiple gas features \parencite{Peng2024}. Lin et al. applied manifold-based feature selection to identify relevant gas features and reduce redundancy in transformer fault diagnosis \parencite{Lin2026}. Ren et al. further demonstrated that optimized feature inputs improve the performance of CatBoost-based models for DGA classification \parencite{Ren2025}. While these approaches enhance classification accuracy, many rely on dataset-specific feature engineering, which may limit generalization across different transformer conditions.
-
-More advanced approaches have explored data-driven feature learning techniques. Vidal and Castro proposed a hybrid model combining variational autoencoders (VAE) and neural networks to learn compact feature representations from DGA data \parencite{Vidal2023}. Zhou et al. applied graph-based learning to capture relationships between samples in semi-supervised settings \parencite{Zhou2023}. Sun et al. further demonstrated that semi-supervised frameworks can extract useful representations from both labeled and unlabeled datasets \parencite{Sun2025}. These methods indicate a shift from predefined gas features toward learned representations, although such models may reduce interpretability.
-
-Despite improvements in classification accuracy, interpretability remains a critical challenge. Wang et al. highlighted that hybrid AI models for DGA-based diagnosis may lack transparency in their decision-making process \parencite{Wang2023}. Nguyen et al. demonstrated that fuzzy logic models provide interpretable diagnostic rules based on gas features \parencite{Nguyen2025}. Souvannalath et al. proposed a cognitive artificial intelligence framework that integrates domain knowledge with data-driven learning to improve diagnostic reasoning \parencite{Souvannalath2024}. These findings suggest that interpretability should be aligned with known gas generation mechanisms and transformer fault behavior to ensure practical applicability.
-
-Overall, the reviewed studies demonstrate that ML has significantly enhanced transformer fault classification using DGA. However, the literature consistently highlights key challenges, including class imbalance, limited labeled data, feature representation, and model interpretability. Addressing these challenges is essential for developing reliable, efficient, and practically deployable transformer diagnostic systems.
-
-\section{Emergence of Machine Learning in DGA-Based Fault Classification}
-
-In the reviewed literature, transformer fault diagnosis using Dissolved Gas Analysis (DGA) is commonly formulated as a multi-class classification problem, where gas concentration features are mapped to discrete fault categories. Ren et al. proposed a CatBoost-based classification model optimized using SCGWO for transformer fault diagnosis, explicitly addressing multi-class classification using DGA data \parencite{Ren2025}. Kumar et al. conducted a comparative evaluation of multiple machine learning algorithms for transformer fault classification, demonstrating the applicability of classification models across different fault categories \parencite{Kumar2024}. Nguyen et al. applied adaptive fuzzy logic systems to classify transformer faults based on gas concentrations, providing interpretable rule-based classification aligned with transformer fault conditions \parencite{Nguyen2025}. These studies collectively demonstrate that classification-based approaches are consistently employed in DGA-based fault diagnosis. However, most of these methods rely heavily on dataset-specific characteristics, which may limit their generalization capability in real-world transformer conditions.
-
-In addition to supervised classification, several studies address the limitation of labeled data by introducing semi-supervised learning frameworks. Zhou et al. developed a semi-supervised graph convolutional network (GCN) that utilizes both labeled and unlabeled DGA data for transformer fault diagnosis \parencite{Zhou2023}. Sun et al. proposed a dual-stage semi-supervised learning framework to improve classification performance under limited labeled data conditions \parencite{Sun2025}. Liu et al. applied self-organizing neural networks to model DGA data structures without requiring fully labeled datasets \parencite{Liu2025}. These approaches indicate that DGA-based fault diagnosis is not solely a classification task but also a data-constrained learning problem, where the availability of labeled data significantly influences model performance.
-
-Another consistent issue identified across the literature is class imbalance in DGA datasets. Du et al. addressed this issue by proposing a reduced-dimensional generative adversarial network to generate synthetic minority-class samples, thereby improving dataset distribution \parencite{Du2024}. Kari et al. developed an improved auxiliary classifier GAN (ACGAN) to balance class distribution and enhance classification performance \parencite{Kari2023}. Chen et al. formulated transformer fault diagnosis as a highly imbalanced multiclass problem and proposed a sequential ensembled extreme learning machine (SE-ELM) to improve classification stability across fault categories \parencite{Chen2023}. While these approaches improve performance under imbalanced conditions, they often introduce additional model complexity, which may affect computational efficiency and practical deployment. Therefore, handling class imbalance remains a critical aspect of machine learning problem formulation in DGA-based transformer fault diagnosis.
-
-However, despite the extensive application of machine learning techniques in DGA-based transformer fault diagnosis, several limitations remain evident. Most existing approaches focus primarily on improving classification performance, while challenges such as class imbalance, limited labeled data, and dataset dependency continue to affect model robustness and generalization. In addition, although semi-supervised and data augmentation techniques have been introduced, these methods often increase model complexity without fully addressing practical deployment constraints. Furthermore, the integration of high-performance classification models with interpretable and physically meaningful diagnostic frameworks remains limited. 
-
-Therefore, a significant research gap exists in developing a unified machine learning-based DGA fault classification framework that not only achieves high accuracy but also ensures interpretability, effectively handles imbalanced and limited data, and aligns model predictions with known transformer fault mechanisms. Addressing these limitations forms the basis for the proposed methodology in this study.
-
-\section{Machine Learning Workflow for DGA Analysis}
-
-In practice, ML-based DGA fault classification is implemented through a structured workflow consisting of data acquisition, preprocessing, feature engineering, and model training. DGA measurements are initially collected from transformer monitoring systems, followed by preprocessing steps such as handling missing values, noise reduction, and feature normalization. Peng et al. proposed a multi-dimensional gas representation method that captures relationships among gas features to enhance early fault warning capability \parencite{Peng2024}. Lin et al. further applied manifold-based feature selection to identify relevant gas features and reduce redundancy \parencite{Lin2026}. In addition, Ren et al. demonstrated that integrating optimized feature inputs with CatBoost improves classification performance and model stability in DGA-based diagnosis \parencite{Ren2025}. These studies collectively demonstrate that feature engineering plays a critical role in enhancing diagnostic performance.
-
-Feature selection and dimensionality reduction are also necessary to address the high dimensionality of DGA datasets. Zhou et al. proposed a semi-supervised graph convolutional network (GCN) that utilizes both labeled and unlabeled data to improve learning performance under limited supervision \parencite{Zhou2023}. Sun et al. introduced a dual-stage semi-supervised learning framework to enhance classification accuracy when labeled data are limited \parencite{Sun2025}. Lin et al. further demonstrated that manifold-based feature selection improves both classification accuracy and generalization capability by selecting the most informative gas features \parencite{Lin2026}. 
-
-While these approaches improve model performance, many existing workflows rely on dataset-specific preprocessing and feature engineering strategies, which may limit their robustness and generalization across different transformer operating conditions. Furthermore, the integration of efficient feature engineering techniques with interpretable and scalable machine learning models remains limited. Therefore, effective feature representation and selection are not only essential components of the ML workflow but also key challenges that need to be addressed in developing practical transformer fault diagnosis systems.
-
-\section{Categories of Machine Learning Tasks in Transformer Diagnostics}
-
-Machine learning applications in transformer fault diagnosis using DGA can be broadly categorized into classification, regression, and anomaly detection tasks. Among these, classification-based approaches are the most widely adopted, as they aim to map gas concentration features to discrete fault categories. Ren et al. developed a CatBoost-based classification model optimized with SCGWO to distinguish multiple transformer fault types using DGA data \parencite{Ren2025}. Kumar et al. conducted a comparative evaluation of several machine learning algorithms, demonstrating the effectiveness of classification models across different fault categories \parencite{Kumar2024}. Peng et al. further applied classification techniques within an early warning framework using multi-dimensional gas representations, enabling the identification of potential fault conditions \parencite{Peng2024}. These studies collectively demonstrate that classification models serve as the primary approach for DGA-based transformer fault diagnosis.
-
-In addition to classification, other learning paradigms have been explored to address data limitations and improve diagnostic performance. Zhou et al. proposed a semi-supervised graph convolutional network (GCN) to utilize both labeled and unlabeled DGA data for transformer fault diagnosis \parencite{Zhou2023}. Sun et al. introduced a dual-stage semi-supervised learning framework to improve classification performance under limited labeled data conditions \parencite{Sun2025}. Souvannalath et al. developed a cognitive artificial intelligence framework that integrates contextual knowledge into the diagnostic process \parencite{Souvannalath2024}. Vidal and Castro proposed a hybrid model combining variational autoencoders and neural networks to enhance feature representation and improve classification performance \parencite{Vidal2023}. 
-
-While these advanced approaches improve learning capability and data utilization, most studies remain focused on classification tasks, with relatively limited exploration of regression and anomaly detection methods for transformer diagnostics. Furthermore, many models are evaluated under controlled conditions and may not fully capture real-world operational variability. Therefore, a more comprehensive and integrated approach that considers multiple learning paradigms, data constraints, and practical deployment requirements is needed to enhance the robustness and applicability of ML-based transformer fault diagnosis systems.
-
-\section{Feature Representation and Characteristics in DGA Analysis}
-
-In DGA-based transformer fault classification, features represent measurable characteristics of transformer conditions derived from gas generation processes. Liu et al. demonstrated that gas concentration values can be utilized as input variables for modeling transformer fault mechanisms \parencite{Liu2025}. Nguyen et al. applied adaptive fuzzy logic models to capture the relationship between gas features and fault categories, enabling rule-based interpretation of transformer conditions \parencite{Nguyen2025}. Wang et al. further showed that interactions between multiple gas components are inherently nonlinear, requiring models capable of capturing complex feature relationships \parencite{Wang2023}. These studies indicate that gas features are directly linked to fault mechanisms and must be appropriately represented to ensure accurate and reliable diagnosis.
-
-To improve feature representation, several studies have proposed feature engineering and selection techniques. Peng et al. introduced a multi-dimensional gas representation method to capture relationships among multiple gas features, thereby enhancing early fault detection capability \parencite{Peng2024}. Lin et al. applied manifold-based feature selection to identify relevant gas features and reduce redundancy in high-dimensional datasets \parencite{Lin2026}. Ren et al. demonstrated that optimized feature inputs, when integrated with a CatBoost-based model, improve classification performance and model stability \parencite{Ren2025}. While these approaches enhance model accuracy, many rely on dataset-specific feature transformations, which may limit generalization across different transformer operating environments.
-
-In addition to predefined feature engineering, recent studies have explored data-driven feature learning techniques. Vidal and Castro proposed a hybrid model combining variational autoencoders (VAE) and neural networks to learn compact feature representations from DGA data \parencite{Vidal2023}. Zhou et al. applied graph-based learning to capture structural relationships between DGA samples in a semi-supervised framework \parencite{Zhou2023}. Sun et al. further demonstrated that semi-supervised learning can extract useful feature representations from both labeled and unlabeled data \parencite{Sun2025}. These approaches indicate a shift from manually defined gas features toward learned representations for transformer fault diagnosis. However, such data-driven methods may reduce model interpretability, which is critical for practical deployment in engineering applications.
-
-Overall, feature representation remains a fundamental component in DGA-based transformer fault classification. Despite advancements in both engineered and learned representations, achieving a balance between model accuracy, generalization, and interpretability remains a key challenge that requires further investigation.
-
-\section{Datasets Used in DGA-Based Transformer Fault Classification}
-
-The effectiveness of machine learning (ML)-based transformer fault diagnosis is strongly influenced by the datasets used for model training and evaluation. Ren et al. utilized DGA datasets containing multiple fault categories to evaluate a CatBoost-based classification model \parencite{Ren2025}. Kumar et al. conducted a comparative study of multiple machine learning algorithms using DGA datasets for transformer fault classification \parencite{Kumar2024}. Wang et al. further demonstrated that dataset characteristics, including data distribution and quality, significantly affect the performance of hybrid AI models in DGA-based diagnosis \parencite{Wang2023}. These studies indicate that dataset composition and quality play a critical role in determining model performance and reliability.
-
-A major issue identified in DGA datasets is class imbalance, where certain fault categories are underrepresented. Du et al. addressed this problem by proposing a generative adversarial network (GAN) to generate synthetic samples for minority classes, thereby improving dataset distribution \parencite{Du2024}. Kari et al. developed an improved auxiliary classifier GAN (ACGAN) to enhance data balance and classification performance under imbalanced conditions \parencite{Kari2023}. Chen et al. proposed a sequential ensembled extreme learning machine (SE-ELM) designed for highly imbalanced multiclass datasets, improving classification stability across different fault types \parencite{Chen2023}. 
-
-While these approaches improve performance under imbalanced conditions, they often introduce additional computational complexity and may rely on synthetic data that does not fully represent real transformer behavior. Consequently, dataset preprocessing and augmentation remain necessary but insufficient solutions, highlighting the need for more robust and generalizable approaches to handling imbalance in DGA-based transformer fault diagnosis.
-
-\section{Challenges in ML-Based DGA Fault Classification}
-
-Despite the reported performance of ML-based approaches, several challenges remain in DGA-based transformer fault diagnosis. One major issue is class imbalance, where certain fault types are underrepresented in the dataset. Du et al. addressed this problem by proposing a generative adversarial network to generate synthetic minority-class samples \parencite{Du2024}. Kari et al. further developed an improved auxiliary classifier GAN (ACGAN) to enhance dataset balance and improve classification performance \parencite{Kari2023}. Chen et al. proposed a sequential ensembled extreme learning machine (SE-ELM) specifically designed for highly imbalanced multiclass DGA datasets, improving classification stability across fault categories \parencite{Chen2023}. 
-
-While these approaches improve performance under imbalanced conditions, they often introduce increased model complexity and may rely on synthetic data that does not fully reflect real transformer operating conditions. Consequently, imbalance-aware modeling remains a critical yet unresolved challenge for achieving reliable and practically deployable fault classification systems.
-
-Another challenge is model evaluation and generalization across different datasets and operating conditions. Laburú et al. demonstrated that conventional evaluation metrics such as accuracy may not be sufficient for imbalanced datasets and proposed alternative evaluation measures to better assess classification performance \parencite{Laburu2024}. Zhou et al. reported that model performance can vary significantly across different datasets due to variations in data distribution \parencite{Zhou2024}. Wang et al. further showed that hybrid AI models are highly sensitive to dataset characteristics, which directly influence diagnostic accuracy \parencite{Wang2023}. 
-
-These findings indicate that robust evaluation strategies and strong generalization capability are essential for practical deployment. However, many existing studies are validated on limited or dataset-specific scenarios, which restricts their applicability in real-world transformer environments. Therefore, addressing both evaluation robustness and generalization remains a key challenge that must be considered in the development of effective ML-based transformer diagnostic systems.
-
-\section{Explainable Artificial Intelligence (XAI) and Physical Interpretability}
-
-Explainable Artificial Intelligence (XAI) has been increasingly applied in ML-based transformer fault diagnosis to enhance the interpretability of model predictions. In DGA-based applications, interpretability refers to the ability of a model to provide explanations that are consistent with known gas generation mechanisms associated with transformer faults. Wang et al. demonstrated that hybrid AI models may lack transparency in their decision-making processes, which can limit their practical adoption \parencite{Wang2023}. Nguyen et al. applied adaptive fuzzy logic systems to produce interpretable rule-based outputs based on gas features \parencite{Nguyen2025}. Souvannalath et al. further proposed a cognitive artificial intelligence framework that integrates domain knowledge with data-driven learning to improve diagnostic reasoning \parencite{Souvannalath2024}. These studies collectively demonstrate that interpretability is essential for the reliable application of ML models in transformer diagnostics.
-
-Several studies have proposed approaches that integrate interpretability with model performance. Souvannalath et al. introduced a cognitive AI approach that combines contextual reasoning with machine learning models \parencite{Souvannalath2024}. Vidal and Castro developed a hybrid model combining variational autoencoders and genetic programming to improve feature representation and model interpretability \parencite{Vidal2023}. Sun et al. demonstrated that semi-supervised learning frameworks can enhance both classification performance and the understanding of data structure in DGA datasets \parencite{Sun2025}. These approaches indicate a shift toward embedding interpretability within model design rather than treating it as a separate post-processing step. 
-
-However, many high-performance machine learning models remain inherently complex and function as black-box systems, making it difficult to fully interpret their decision-making processes. This creates a trade-off between model accuracy and interpretability, which remains a significant challenge in practical transformer diagnostic applications.
-
-In DGA-based fault diagnosis, interpretability must also be consistent with physical fault mechanisms. Gas generation patterns are associated with specific fault types, and diagnostic models should reflect these relationships. For example, acetylene is associated with arcing faults, while methane and ethylene are associated with thermal faults. Ensuring that model outputs align with these relationships improves the reliability and trustworthiness of diagnostic decisions. Wang et al. emphasized that model transparency is necessary for engineering applications \parencite{Wang2023}, while Nguyen et al. demonstrated that rule-based systems can effectively reflect domain knowledge in diagnostic outputs \parencite{Nguyen2025}. 
-
-Therefore, XAI in DGA-based transformer diagnosis must not only improve interpretability but also ensure consistency between model predictions and known physical behavior. Achieving this balance remains a key challenge and highlights the need for integrated approaches that combine high model performance with meaningful and physically interpretable outputs.
-
-
-\section{Transition Toward Intelligent and Explainable Systems}
-
-Recent studies have increasingly focused on improving ML-based transformer diagnostic systems by integrating intelligent and explainable approaches. Souvannalath et al. proposed a cognitive artificial intelligence framework that combines knowledge-based reasoning with data-driven models to enhance diagnostic reliability \parencite{Souvannalath2024}. Vidal and Castro developed a hybrid model combining variational autoencoders and genetic programming to improve feature representation and classification performance in DGA-based diagnosis \parencite{Vidal2023}. Sun et al. further demonstrated that semi-supervised learning frameworks can enhance classification performance under limited labeled data conditions \parencite{Sun2025}. These approaches indicate a shift toward developing more adaptive and intelligent diagnostic systems capable of handling complex and data-constrained environments.
-
-At the same time, interpretability has been identified as a critical requirement for the practical deployment of ML-based diagnostic systems. Wang et al. demonstrated that black-box models may limit adoption due to the lack of transparency in decision-making \parencite{Wang2023}. Nguyen et al. applied fuzzy logic models to produce interpretable diagnostic outputs based on gas features, thereby supporting engineering decision-making \parencite{Nguyen2025}. Souvannalath et al. further showed that incorporating domain knowledge into AI systems improves the reliability and consistency of diagnostic results \parencite{Souvannalath2024}. These studies highlight that integrating ML models with interpretable mechanisms is essential to ensure that diagnostic systems are both accurate and practically usable.
-
-However, despite these advancements, most existing approaches either prioritize model performance or interpretability, rather than effectively balancing both. This creates a gap between high-accuracy models and practically deployable systems that require transparency and reliability. Therefore, there is a growing need for integrated diagnostic frameworks that simultaneously achieve high classification performance, interpretability, and robustness under real-world operating conditions.
-
-\begin{table}[htbp]
-\centering
-\caption{The comparison highlights that while advanced machine learning models improve classification performance, they often introduce complexity and reduce interpretability, reinforcing the need for a balanced and integrated diagnostic framework.}
-\label{tab:ml_comparison}
-\begin{tabular}{|c|m{3.5cm}|m{5cm}|m{4cm}|}
-\hline
-\textbf{No.} & \textbf{Technique} & \textbf{Strengths} & \textbf{Limitations} \\ \hline
-
-1 & CatBoost (Ren et al.) 
-& High classification accuracy; robust performance for multi-class fault diagnosis; optimized using SCGWO. 
-& May require parameter tuning; limited interpretability as a tree-based ensemble model. \\ \hline
-
-2 & GAN / ACGAN (Du et al., Kari et al.) 
-& Effective for handling class imbalance through synthetic data generation; improves dataset distribution. 
-& Introduces additional complexity; synthetic data may not fully represent real fault conditions. \\ \hline
-
-3 & GCN (Zhou et al.) 
-& Utilizes both labeled and unlabeled data; captures relationships between samples; suitable for semi-supervised learning. 
-& Computationally complex; performance depends on graph structure design. \\ \hline
-
-4 & SE-ELM (Chen et al.) 
-& Designed for highly imbalanced datasets; improves classification stability across fault categories. 
-& May lack flexibility for complex feature relationships; limited interpretability. \\ \hline
-
-5 & Fuzzy Logic (Nguyen et al.) 
-& Highly interpretable; aligns with physical fault mechanisms; supports rule-based reasoning. 
-& Lower predictive accuracy compared to advanced ML models; limited scalability. \\ \hline
-
-\end{tabular}
-\end{table}
-
-
-\section{Research Gap}
-
-Based on the reviewed literature, several critical limitations remain in machine learning-based transformer fault diagnosis using Dissolved Gas Analysis (DGA).
-
-Firstly, although many studies have achieved high classification accuracy using advanced machine learning models such as CatBoost, GAN-based augmentation, and semi-supervised learning, most approaches primarily focus on performance optimization without adequately addressing model interpretability. While techniques such as fuzzy logic and cognitive artificial intelligence provide interpretable outputs, they are rarely integrated with high-performance models, resulting in a persistent trade-off between accuracy and interpretability \parencite{Ren2025, Nguyen2025, Souvannalath2024}.
-
-Secondly, class imbalance remains a significant challenge in DGA datasets. Although data augmentation techniques such as GAN and ACGAN have been introduced to generate synthetic minority-class samples, these methods often increase model complexity and may introduce uncertainty in the generated data. Furthermore, imbalance-aware models such as SE-ELM improve classification stability; however, a unified and efficient approach that simultaneously ensures data balance, model performance, and computational efficiency is still lacking \parencite{Du2024, Kari2023, Chen2023}.
-
-Thirdly, the generalization capability of existing models remains limited. Many models are developed and validated using specific datasets, which restricts their applicability under varying transformer operating conditions. Previous studies have shown that model performance is highly dependent on dataset characteristics and data distribution, highlighting the need for more robust validation strategies and generalizable models \parencite{Wang2023, Zhou2024, Laburu2024}.
-
-Finally, although recent studies have explored explainable and cognitive AI approaches, there is still limited integration between machine learning models and the underlying physical knowledge of transformer fault mechanisms. Most existing approaches prioritize predictive performance without ensuring that model outputs are consistent with known gas generation behavior, which is essential for reliable engineering applications.
-
-Therefore, a significant research gap exists in the development of an integrated machine learning-based DGA fault classification framework that simultaneously achieves high classification accuracy, ensures model interpretability, effectively handles imbalanced and limited data, and aligns model predictions with physical fault mechanisms. Addressing these challenges is essential for developing reliable, robust, and practically deployable transformer diagnostic systems.
-
-\section{Chapter Summary}
-
-This chapter critically reviewed existing studies on machine learning-based transformer fault diagnosis using Dissolved Gas Analysis (DGA). The literature demonstrates that machine learning techniques, including ensemble models, semi-supervised learning, and data augmentation methods, have significantly enhanced fault classification performance by capturing complex relationships within gas data.
-
-The review further examined key components of ML-based diagnostic systems, including problem formulation, feature representation, dataset characteristics, and model development. In particular, feature engineering and data preprocessing were identified as critical factors influencing model performance and reliability. Additionally, major challenges such as class imbalance, limited labeled data, and model generalization were analyzed in the context of existing studies.
-
-Furthermore, the importance of interpretability was emphasized, where explainable artificial intelligence (XAI) approaches aim to ensure that model predictions are consistent with known transformer fault mechanisms. Despite these advancements, several limitations remain, particularly the lack of integration between high-performance models and interpretable frameworks.
-
-Based on these findings, a significant research gap was identified, highlighting the need for a unified approach that integrates accurate classification, robust data handling, and physically meaningful interpretation. This gap forms the foundation for the proposed methodology presented in the subsequent chapter.
