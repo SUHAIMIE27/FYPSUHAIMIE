@@ -260,11 +260,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Declaration, Acknowledgement, Title (Malay), Abstracts, Department, etc.
-\def\declarationLLM#1{\gdef\@declarationLLM{#1}} % Declaration text
-\def\penghargaan#1{\gdef\@penghargaan{#1}}         % Acknowledgement text
+\long\def\declarationLLM#1{\gdef\@declarationLLM{#1}} % Declaration text
+\long\def\penghargaan#1{\gdef\@penghargaan{#1}}         % Acknowledgement text
 %\def\TitleMalay#1{\gdef\@TitleMalay{#1}}           % Thesis title in Malay
-\def\abstractMalay#1{\gdef\@abstractMalay{#1}}     % Abstract in Malay
-\def\abstract#1{\gdef\@abstract{#1}}               % Abstract in English
+\long\def\abstractMalay#1{\gdef\@abstractMalay{#1}}     % Abstract in Malay
+\long\def\abstract#1{\gdef\@abstract{#1}}               % Abstract in English
 \def\dept#1{\gdef\@dept{#1}}                       % Department
 \def\hod#1{\gdef\@hod{#1}}                         % Head of Department
 \def\degree#1{\gdef\@degree{#1}}                   % Degree type

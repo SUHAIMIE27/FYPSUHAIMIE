@@ -1,8 +1,8 @@
-﻿\chapter{Literature Review}
+\chapter{Literature Review}
 This chapter reviews existing literature on dissolved gas analysis (DGA)
 for transformer fault classification using machine learning (ML) and
-explainable AI (XAI). Section\,2.1 introduces DGA and key gases (Hâ‚‚,
-CHâ‚„, Câ‚‚Hâ‚†, Câ‚‚Hâ‚„, Câ‚‚Hâ‚‚, CO, COâ‚‚) used to diagnose incipient faults.
+explainable AI (XAI). Section\,2.1 introduces DGA and key gases (H$_2$,
+CH$_4$, C$_2$H$_6$, C$_2$H$_4$, C$_2$H$_2$, CO, CO$_2$) used to diagnose incipient faults.
 Section\,2.2 surveys traditional DGA interpretation methods (Key Gas,
 Dornenburg, Rogers, IEC ratios, Duval triangle/pentagon), noting their
 reliance on fixed thresholds/ratios and known limitations (conflicting
@@ -40,9 +40,9 @@ DGA is a standard tool for monitoring transformer health by measuring
 key gas concentrations dissolved in insulation oil. Under fault
 conditions (overheating or arcing), the oil and cellulose insulation
 decompose, generating combustible gases. The primary fault gases are
-hydrogen (Hâ‚‚), methane (CHâ‚„), ethane (Câ‚‚Hâ‚†), ethylene (Câ‚‚Hâ‚„), acetylene
-(Câ‚‚Hâ‚‚), and the byproducts carbon monoxide (CO) and carbon dioxide
-(COâ‚‚). IEEE C57.104â€‘2019 and IEC 60599:2022 codify how these gas levels
+hydrogen (H$_2$), methane (CH$_4$), ethane (C$_2$H$_6$), ethylene (C$_2$H$_4$), acetylene
+(C$_2$H$_2$), and the byproducts carbon monoxide (CO) and carbon dioxide
+(CO$_2$). IEEE C57.104-2019 and IEC 60599:2022 codify how these gas levels
 relate to fault types (thermal, electrical, partial discharge) and
 normal aging, but interpretation requires human expertise or
 supplementary methods. DGA thus provides early warning of developing
@@ -59,13 +59,13 @@ Traditional DGA methods use thresholds or gas ratios to infer fault
 category. The \textbf{Key Gas} method simply identifies the single gas
 with the highest concentration as the ``fault gas'' (e.g.~an unusually
 high acetylene implies arcing). The \textbf{Dornenburg} and
-\textbf{Rogers} ratio methods calculate fixed gas ratios (e.g.~CHâ‚„/Hâ‚‚,
-Câ‚‚Hâ‚‚/CHâ‚„, Câ‚‚Hâ‚„/Câ‚‚Hâ‚†, etc.) to map to fault regions. The \textbf{IEC
+\textbf{Rogers} ratio methods calculate fixed gas ratios (e.g.~CH$_4$/H$_2$,
+C$_2$H$_2$/CH$_4$, C$_2$H$_4$/C$_2$H$_6$, etc.) to map to fault regions. The \textbf{IEC
 ratio method} \parencite{IEC60599} uses a subset of the Rogers ratios (omitting
-Câ‚‚Hâ‚†/CHâ‚„) to distinguish low- vs.~high-temperature thermal faults.
-\textbf{Duval's triangle} uses the three hydrocarbon gases CHâ‚„, Câ‚‚Hâ‚„,
-Câ‚‚Hâ‚‚ on a triangular plot to classify faults, while \textbf{Duval's
-pentagon} extends this by including Hâ‚‚ and Câ‚‚Hâ‚† to better differentiate
+C$_2$H$_6$/CH$_4$) to distinguish low- vs.~high-temperature thermal faults.
+\textbf{Duval's triangle} uses the three hydrocarbon gases CH$_4$, C$_2$H$_4$,
+C$_2$H$_2$ on a triangular plot to classify faults, while \textbf{Duval's
+pentagon} extends this by including H$_2$ and C$_2$H$_6$ to better differentiate
 fault severity (e.g.~high-energy vs.~low-energy thermal faults). All
 these methods are simple and provide fault-level explanations. However,
 they have notable limitations. Ratio methods can give conflicting or
@@ -102,23 +102,23 @@ Limitations
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Key Gas & Single highest-concentration gas (Hâ‚‚, CHâ‚„, Câ‚‚Hâ‚†, Câ‚‚Hâ‚„, Câ‚‚Hâ‚‚,
-CO, COÃ¢â€šâ€š) & Predominant fault gas type\newline (thermal vs.~electrical) & Always
+Key Gas & Single highest-concentration gas (H$_2$, CH$_4$, C$_2$H$_6$, C$_2$H$_4$, C$_2$H$_2$,
+CO, CO$_2$) & Predominant fault gas type\newline (thermal vs.~electrical) & Always
 yields a classification (simple) & High misdiagnosis rate (\(\approx\)30--50\%);
 ignores mixed faults \\
-Dornenburg Ratio & CHÃ¢â€šâ€ž/CÃ¢â€šâ€šHÃ¢â€šâ€ž, CHÃ¢â€šâ€ž/CÃ¢â€šâ€šHÃ¢â€šâ€š, CÃ¢â€šâ€šHÃ¢â€šâ€š/CÃ¢â€šâ€šHÃ¢â€šâ€ž & Broad thermal\newline
+Dornenburg Ratio & CH$_4$/C$_2$H$_4$, CH$_4$/C$_2$H$_2$, C$_2$H$_2$/C$_2$H$_4$ & Broad thermal\newline
 vs.~discharge & Accounts for gas ratios & Over-simplified; uses fixed
 thresholds \\
-Rogers Ratio & CHâ‚„/Hâ‚‚, Câ‚‚Hâ‚†/CHâ‚„, Câ‚‚Hâ‚„/Câ‚‚Hâ‚†, Câ‚‚Hâ‚‚/Câ‚‚Hâ‚„ & Detailed thermal
+Rogers Ratio & CH$_4$/H$_2$, C$_2$H$_6$/CH$_4$, C$_2$H$_4$/C$_2$H$_6$, C$_2$H$_2$/C$_2$H$_4$ & Detailed thermal
 (low/high) and PD & More fault categories than Key Gas & Inconsistent
 when gases out-of-range; ignores aging \\
-IEC Ratio (60599) & CHâ‚„/Hâ‚‚, Câ‚‚Hâ‚‚/CHâ‚„, Câ‚‚Hâ‚‚/Câ‚‚Hâ‚„ & Low- vs.~high-energy
+IEC Ratio (60599) & CH$_4$/H$_2$, C$_2$H$_2$/CH$_4$, C$_2$H$_2$/C$_2$H$_4$ & Low- vs.~high-energy
 faults, PD & Standardized in IEC {[}IEC 60599:2022{]} & Cannot subtype
-within categories; excludes Câ‚‚Hâ‚†/CHâ‚„ \\
-Duval Triangle & CHÃ¢â€šâ€ž, CÃ¢â€šâ€šHÃ¢â€šâ€ž, CÃ¢â€šâ€šHÃ¢â€šâ€š (triangular plot) & Six fault zones\newline
+within categories; excludes C$_2$H$_6$/CH$_4$ \\
+Duval Triangle & CH$_4$, C$_2$H$_4$, C$_2$H$_2$ (triangular plot) & Six fault zones\newline
 (PD, low \& high thermal/electrical) & Graphical; intuitive\newline
 visualization & No ``normal'' region; requires user-set gas limits \\
-Duval Pentagon (1,2) & Hâ‚‚, CHâ‚„, Câ‚‚Hâ‚†, Câ‚‚Hâ‚„, Câ‚‚Hâ‚‚ (five-point plot) &
+Duval Pentagon (1,2) & H$_2$, CH$_4$, C$_2$H$_6$, C$_2$H$_4$, C$_2$H$_2$ (five-point plot) &
 Refines thermal categories (T1, T2, T3) & Extends triangle method \parencite{IEEEC57104} & Complex; still manual; may be ignored if gases
 low \\
 \end{longtable}\endgroup
@@ -168,8 +168,8 @@ Representation}\label{dga-feature-representation}
 Features}\label{gas-concentration-features}
 
 The simplest feature set for ML models is the raw gas concentrations. As
-noted, a complete DGA sample includes seven key gas features: Hâ‚‚, CHâ‚„,
-Câ‚‚Hâ‚†, Câ‚‚Hâ‚„, Câ‚‚Hâ‚‚, CO, and COâ‚‚. (Other gases such as oxygen or nitrogen
+noted, a complete DGA sample includes seven key gas features: H$_2$, CH$_4$,
+C$_2$H$_6$, C$_2$H$_4$, C$_2$H$_2$, CO, and CO$_2$. (Other gases such as oxygen or nitrogen
 may be measured but usually remain constant and are excluded from
 diagnostics.) Using raw concentrations allows the model to directly
 learn from the actual measurements. This approach has the advantage of
@@ -184,8 +184,8 @@ age, which may require normalization or inclusion of meta-features
 \subsection{2.4.2 Gas Ratio Features}\label{gas-ratio-features}
 
 Many traditional DGA patterns are defined by ratios of two gases, as in
-the Rogers and IEC methods. Common ratio features include CHâ‚„/Hâ‚‚,
-Câ‚‚Hâ‚†/CHâ‚„, Câ‚‚Hâ‚„/Câ‚‚Hâ‚†, Câ‚‚Hâ‚‚/Câ‚‚Hâ‚„, as well as Câ‚‚Hâ‚‚/Hâ‚‚ and COâ‚‚/CO (the
+the Rogers and IEC methods. Common ratio features include CH$_4$/H$_2$,
+C$_2$H$_6$/CH$_4$, C$_2$H$_4$/C$_2$H$_6$, C$_2$H$_2$/C$_2$H$_4$, as well as C$_2$H$_2$/H$_2$ and CO$_2$/CO (the
 latter helps separate oil vs.~paper degradation). Using ratios has the
 benefit of highlighting relative gas patterns independent of scale. For
 example, Rogers ratios effectively classify fault type across
@@ -206,7 +206,7 @@ addition to raw and pairwise ratios, researchers often include composite
 features such as \emph{total dissolved combustible gas} (TDCG) or
 percentage contributions of each gas to TDCG. Mirowski and LeCun (2012)
 showed that a logarithmic transformation of raw gas values implicitly
-encodes ratios (since log(A/B)=log A -- log B). Thus, logâ€transformed
+encodes ratios (since log(A/B)=log A -- log B). Thus, log-transformed
 raw features allow the model to learn ratio-like distinctions. Some
 works also normalize gas concentrations by transformer size or operating
 conditions. Feature sets may also include non-gas attributes
@@ -281,18 +281,18 @@ automatically tuned algorithms.
 \subsection{2.5.2 Decision Tree (DT)}\label{decision-tree-dt}
 
 \textbf{Definition:} A decision tree classifier partitions the feature
-space by asking a sequence of threshold questions (e.g.~``CHâ‚„
+space by asking a sequence of threshold questions (e.g.~``CH$_4$
 \textgreater{} 10 ppm?''), forming a tree of nodes. Leaves correspond to
 class labels.\\
 \textbf{DGA Applications:} Decision trees have been applied to DGA fault
 datasets, often in combination with ensemble methods. Their rule-based
 nature makes them directly analogous to traditional DGA rules (ratio
 thresholds), but automatically learned from data. For instance, an
-internal node might split on CHâ‚„/Hâ‚‚ ratio to decide a thermal vs.~arcing
+internal node might split on CH$_4$/H$_2$ ratio to decide a thermal vs.~arcing
 fault.\\
 \textbf{Strengths:} Decision trees are simple to interpret: one can
 trace a path from root to leaf as a human-readable rule (e.g.~``IF
-CHâ‚„/Hâ‚‚ \textgreater{} 0.2 AND Câ‚‚Hâ‚‚ \textgreater{} 5 ppm THEN
+CH$_4$/H$_2$ \textgreater{} 0.2 AND C$_2$H$_2$ \textgreater{} 5 ppm THEN
 fault=T2''). They handle both numerical and categorical data, and can
 capture nonlinear feature interactions. Training is fast, and they can
 handle missing values (by surrogate splits).\\
@@ -503,25 +503,25 @@ Reference Examples
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Gas Concentrations & Hâ‚‚, CHâ‚„, Câ‚‚Hâ‚†, Câ‚‚Hâ‚„, Câ‚‚Hâ‚‚, CO, COâ‚‚ (ppm) & Direct
+Gas Concentrations & H$_2$, CH$_4$, C$_2$H$_6$, C$_2$H$_4$, C$_2$H$_2$, CO, CO$_2$ (ppm) & Direct
 indicators of fault gases; used as raw input & Mirowski \& LeCun (2012)
 ; Suwarno et al. \\
-Gas Ratios & CHâ‚„/Hâ‚‚, Câ‚‚Hâ‚†/CHâ‚„, Câ‚‚Hâ‚„/Câ‚‚Hâ‚†, Câ‚‚Hâ‚‚/Câ‚‚Hâ‚„ & Capture relative
+Gas Ratios & CH$_4$/H$_2$, C$_2$H$_6$/CH$_4$, C$_2$H$_4$/C$_2$H$_6$, C$_2$H$_2$/C$_2$H$_4$ & Capture relative
 gas patterns (e.g.~Rogers ratios) & Rogers (1978) method; Doernenburg
 method \\
-Combined/\\Derived & Log(HÃ¢â€šâ€š), TDCG (sum), gas\% of TDCG, normalized
+Combined/\\Derived & Log(H$_2$), TDCG (sum), gas\% of TDCG, normalized
 features & Enable ML models to learn compound relations; reduce skew &
 Mirowski \& LeCun (2012) (log-transform) \\
 Transformer\\Metadata & Age, Load, Rated Power & Controls for
 transformer-specific factors & Abdel-Fattah \& Allam (2021)* (example
 usage of age) \\
-Expanded Gas\\Ratios & CÃ¢â€šâ€šHÃ¢â€šâ€š/HÃ¢â€šâ€š, COÃ¢â€šâ€š/CO, OÃ¢â€šâ€š/NÃ¢â€šâ€š & Additional ratios to
-detect leakage or cellulose aging & Hâ‚‚Scan (2024) guideâ€  \\
+Expanded Gas\\Ratios & C$_2$H$_2$/H$_2$, CO$_2$/CO, O$_2$/N$_2$ & Additional ratios to
+detect leakage or cellulose aging & H2Scan (2024) guide\textsuperscript{\dag} \\
 \end{longtable}\endgroup
 
 \emph{In some studies, transformer operating data are included to
 contextualize DGA.}\\
-â€ Tutorial example (not peer-reviewed) showing COâ‚‚/CO, Oâ‚‚/Nâ‚‚ usage.
+\textsuperscript{\dag}Tutorial example (not peer-reviewed) showing CO$_2$/CO, O$_2$/N$_2$ usage.
 
 \section{2.7 Explainable AI (XAI) for DGA Fault
 Models}\label{explainable-ai-xai-for-dga-fault-models}
@@ -543,7 +543,7 @@ feature, its attribution is higher) and local accuracy.
 to interpret DGA models. For example, Suwarno \emph{et al.} (2024) used
 TreeSHAP on a Random Forest DGA classifier; their analysis showed that
 feature importances aligned with known gas--fault physics (e.g.~high
-Câ‚‚Hâ‚‚ driving arcing predictions). Similarly, Udeh \emph{et al.} (2026)
+C$_2$H$_2$ driving arcing predictions). Similarly, Udeh \emph{et al.} (2026)
 analyzed their XGBoost DGA model with SHAP and found that the model's
 behavior mirrored physical expectations, but also revealed a ``gray
 zone'': most moderate-severity faults had gas levels too close to normal
@@ -556,11 +556,11 @@ reasoning against domain knowledge and to pinpoint weaknesses
 
 \textbf{Table 2.4. XAI studies on transformer DGA models.}
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1694}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2016}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1935}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.4355}}@{}}
+\begingroup\small\begin{tabularx}{\textwidth}{@{}
+  >{\raggedright\arraybackslash}p{0.16\textwidth}
+  >{\raggedright\arraybackslash}p{0.18\textwidth}
+  >{\raggedright\arraybackslash}p{0.18\textwidth}
+  >{\raggedright\arraybackslash}X@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Study
@@ -572,20 +572,18 @@ XAI Method
 Key Insights
 \end{minipage} \\
 \midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
 Udeh \emph{et al.} (2026) & XGBoost (tree ensemble) & TreeSHAP (SHAP) &
 Found that model's feature attributions matched physics (e.g.~high
-CHâ‚„/Câ‚‚Hâ‚‚ for arcing), but most moderate (incipient) faults had
+CH$_4$/C$_2$H$_2$ for arcing), but most moderate (incipient) faults had
 overlapping gas features; SHAP highlighted this ``diagnostic gray
 zone''. \\
 Sutikno \emph{et al.} (2024) & Random Forest & TreeSHAP (SHAP) &
 (Reported) Feature importances agreed with expected gas--fault links
-(e.g.~Hâ‚‚ important for PD), confirming model reliability. (SHAP values
+(e.g.~H$_2$ important for PD), confirming model reliability. (SHAP values
 revealed which gases drove each fault prediction; details in Heliyon
 paper). \\
-\end{longtable}
+\bottomrule
+\end{tabularx}\endgroup
 
 \emph{Note:} The above transformer-specific XAI studies demonstrate how
 SHAP can explain ML fault models and reveal data-driven limitations.
