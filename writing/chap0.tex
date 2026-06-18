@@ -3,28 +3,37 @@
 \title{XAI Machine Learning-Based Fault Classification of Power Transformers Using Dissolved Gas Analysis (DGA)}
 
 %\TitleMalay{KLASIFIKASI KEROSAKAN TRANSFORMER KUASA MENGGUNAKAN PEMBELAJARAN MESIN BERASASKAN DGA}
+\abstract{Power transformers are critical components in electrical power systems, and their failure can lead to severe operational disruptions and significant economic losses. Dissolved Gas Analysis (DGA) is a widely used diagnostic technique for detecting incipient faults by analysing key gases such as hydrogen (H$_2$), methane (CH$_4$), and acetylene (C$_2$H$_2$). However, conventional rule-based interpretation methods are limited in their ability to handle complex and overlapping fault conditions.
 
-\abstract{Power transformers are critical components in electrical power systems, and their failure can lead to significant operational disruptions and economic losses. Dissolved Gas Analysis (DGA) is a widely used technique for detecting incipient faults by analyzing gas concentrations such as hydrogen (H$_2$), methane (CH$_4$), and acetylene (C$_2$H$_2$). However, traditional diagnostic methods are rule-based and often limited in handling complex fault patterns and overlapping conditions.
-This study proposes an Explainable Artificial Intelligence (XAI) machine learning framework for transformer fault classification using DGA data. The proposed approach focuses on three key aspects: developing a high-accuracy classification model, addressing data-related challenges such as class imbalance and limited labeled data, and ensuring interpretability through explainability techniques. Advanced machine learning algorithms are employed for classification, while data preprocessing and feature engineering techniques are used to enhance model robustness.
-Furthermore, SHapley Additive exPlanations (SHAP) is integrated to provide feature-level explanations, ensuring that model predictions are aligned with physical fault mechanisms. The proposed framework aims to achieve a balance between accuracy, robustness, and interpretability, making it suitable for real-world engineering applications in power system diagnostics.}
+This study proposes an Explainable Artificial Intelligence (XAI)-based machine learning framework for transformer fault classification using DGA data. The framework integrates advanced machine learning algorithms with systematic data preprocessing and feature engineering to improve classification performance under challenging conditions such as class imbalance and limited labelled data.
 
-\abstractMalay{Transformer kuasa merupakan komponen kritikal dalam sistem tenaga elektrik, dan kegagalannya boleh menyebabkan gangguan operasi serta kerugian ekonomi yang besar. Analisis Gas Terlarut (DGA) merupakan kaedah yang digunakan secara meluas untuk mengesan kerosakan awal dengan menganalisis kepekatan gas seperti hidrogen (H$_2$), metana (CH$_4$), dan asetilena (C$_2$H$_2$). Walau bagaimanapun, kaedah tradisional adalah berasaskan peraturan dan mempunyai keterbatasan dalam menangani corak kerosakan yang kompleks.
-Kajian ini mencadangkan satu rangka kerja pembelajaran mesin berasaskan Explainable Artificial Intelligence (XAI) untuk klasifikasi kerosakan transformer menggunakan data DGA. Pendekatan ini memberi tumpuan kepada tiga aspek utama iaitu pembangunan model berketepatan tinggi, pengendalian cabaran data seperti ketidakseimbangan kelas dan data terhad, serta memastikan kebolehjelasan melalui teknik explainability.
-Tambahan pula, kaedah SHapley Additive exPlanations (SHAP) digunakan untuk memberikan penjelasan pada tahap ciri, sekaligus memastikan keputusan model selaras dengan mekanisme fizikal kerosakan. Rangka kerja ini bertujuan mencapai keseimbangan antara ketepatan, kebolehpercayaan, dan kebolehjelasan dalam aplikasi sebenar sistem tenaga.}
+To enhance interpretability, SHapley Additive exPlanations (SHAP) is employed to provide feature-level explanations of model predictions, ensuring alignment with known physical fault mechanisms. This enables both global and local understanding of model behaviour.
 
-\author{MOHAMAD SUHAIMIE}
+The proposed framework aims to achieve a balanced trade-off between accuracy, robustness, and interpretability, making it suitable for practical deployment in power system condition monitoring and fault diagnosis applications.}
+
+\abstractMalay{Transformer kuasa merupakan komponen kritikal dalam sistem tenaga elektrik, dan kegagalannya boleh menyebabkan gangguan operasi yang serius serta kerugian ekonomi yang besar. Analisis Gas Terlarut (DGA) ialah teknik diagnostik yang digunakan secara meluas untuk mengesan kerosakan awal dengan menganalisis gas seperti hidrogen (H$_2$), metana (CH$_4$), dan asetilena (CH$_2$H$_2$). Walau bagaimanapun, kaedah berasaskan peraturan tradisional mempunyai keterbatasan dalam menangani keadaan kerosakan yang kompleks dan bertindih.
+
+Kajian ini mencadangkan rangka kerja pembelajaran mesin berasaskan Explainable Artificial Intelligence (XAI) untuk klasifikasi kerosakan transformer menggunakan data DGA. Rangka kerja ini menggabungkan algoritma pembelajaran mesin dengan pemprosesan data dan kejuruteraan ciri bagi meningkatkan prestasi klasifikasi dalam keadaan cabaran seperti ketidakseimbangan kelas dan data berlabel yang terhad.
+
+Bagi meningkatkan kebolehjelasan, SHapley Additive exPlanations (SHAP) digunakan untuk memberikan penjelasan pada tahap ciri terhadap ramalan model, sekali gus memastikan keselarasan dengan mekanisme fizikal kerosakan. Ini membolehkan pemahaman global dan tempatan terhadap tingkah laku model.
+
+Rangka kerja yang dicadangkan bertujuan mencapai keseimbangan antara ketepatan, kebolehpercayaan, dan kebolehjelasan, menjadikannya sesuai untuk aplikasi sebenar dalam pemantauan keadaan dan diagnostik sistem kuasa.}
+
+\author{MOHAMAD SUHAIMIE BIN ABDUL GAFAR HUSSIN }
 
 \degree{BACHELOR OF SCIENCE WITH HONORS}
 
 \mainsupervisor{Dr. Rodney Petrus Balandong}
 
-\matricno{2023456}
+\matricno{BS23160399}
 
 \copyrightyear{\number\the\year}
 
-\declarationLLM{I acknowledge that during the preparation of this thesis, I have utilized Large Language Models (LLMs) as a supplementary tool to assist in various aspects of my research and writing process. Specifically, LLMs were used to refine language clarity, improve coherence, and assist in structuring content. All outputs were critically reviewed and aligned with the research objectives and technical requirements of this study.}
+\declarationLLM{I acknowledge that during the preparation of this thesis, I have used Large Language Models (LLMs) as a supplementary tool to assist in various aspects of the research and writing process. Specifically, LLMs were used to improve language clarity, enhance coherence, and support the structuring of content. All outputs generated were critically reviewed, verified, and aligned with the research objectives and technical requirements of this study.}
 
-\penghargaan{I would like to express my sincere gratitude to my supervisor, Dr. Rodney Petrus Balandong, for his guidance, support, and valuable insights throughout the completion of this research. His expertise and encouragement have been instrumental in shaping this work. I also extend my appreciation to my family and friends for their continuous support and motivation.}
+\penghargaan{I would like to express my sincere gratitude to my supervisor, Dr. Rodney Petrus Balandong, for his continuous guidance, support, and valuable insights throughout the completion of this research. His expertise and encouragement have been instrumental in shaping this work.
+
+I also extend my heartfelt appreciation to my family and friends for their unwavering support, encouragement, and motivation throughout my academic journey.}
 
 \beforepreface
 \afterpreface

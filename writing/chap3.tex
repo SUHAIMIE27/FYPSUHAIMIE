@@ -4,127 +4,130 @@
 %====================================================
 \section{Overview of the Methodology}
 
-This chapter presents a comprehensive methodological framework developed for explainable machine learning–based fault classification of power transformers using Dissolved Gas Analysis (DGA). The methodology is structured in a systematic and sequential manner to ensure that each stage of the process contributes directly to the overall research objectives. The primary aim of this methodology is to ensure reproducibility, consistency, and interpretability throughout the entire machine learning pipeline.
+This chapter presents a systematic methodological framework for explainable machine learning–based fault classification of power transformers using Dissolved Gas Analysis (DGA). The methodology is designed to ensure reproducibility, consistency, and interpretability across the entire machine learning pipeline.
 
-The methodological design is carefully structured to support three key research objectives, which include the evaluation of feature sets, the comparison of traditional machine learning algorithms, and the interpretation of model decisions using explainable artificial intelligence techniques. Each of these objectives is addressed through a dedicated stage within the pipeline, ensuring that the entire workflow remains aligned and logically structured \parencite{Dladla2025SLR}.
+The proposed framework is structured to address three key research objectives, namely feature set evaluation, comparative analysis of traditional machine learning models, and explainable artificial intelligence (XAI)-based interpretation of model predictions. Each objective is implemented through a dedicated stage within the workflow to ensure methodological alignment and traceability \parencite{Dladla2025SLR}.
 
-The importance of a structured methodology lies in ensuring that each step in the data processing and modelling pipeline contributes meaningfully to the final outcome. In machine learning-based diagnostic systems, especially in engineering applications such as transformer fault classification, a well-defined methodological framework is essential for ensuring reliability and consistency across experiments \parencite{Cao2024Advancement}.
+A structured methodology is essential in data-driven diagnostic systems, particularly in engineering applications such as transformer condition monitoring, where model reliability and experimental consistency are critical for valid conclusions \parencite{Cao2024Advancement}.
 
-Furthermore, the pipeline is designed in a modular format, where each stage operates independently but contributes cumulatively to the final classification and interpretation process. This modularity ensures that any modification in one stage does not compromise the integrity of the entire system, thereby improving robustness and scalability of the proposed approach.
+The pipeline is designed in a modular form, where each stage operates independently while contributing cumulatively to the final classification and interpretation process. This modular structure enhances robustness, scalability, and ease of modification without affecting the integrity of the entire system.
 
-The chapter is organized in a logical progression that begins with raw data processing and continues through feature extraction, feature selection, model training, and evaluation, before concluding with explainable artificial intelligence interpretation. This sequential structure ensures a clear and traceable flow of information throughout the methodology.
+Overall, the chapter follows a sequential workflow beginning with data preprocessing, followed by feature engineering, feature selection, model development, performance evaluation, and concluding with XAI-based interpretation. This ensures a clear and traceable methodological flow from raw data to final insights.
 
 %====================================================
 \section{Data Ingestion and Initial Cleaning}
 
-Data ingestion represents the initial stage of the machine learning pipeline, where benchmark DGA datasets are collected and loaded into the computational environment for analysis. These datasets consist of transformer oil dissolved gas concentrations and their corresponding fault classification labels. The integrity of this stage is critical because any inconsistencies in raw data may directly influence the performance of subsequent machine learning models.
+Data ingestion represents the first stage of the machine learning pipeline, where benchmark DGA datasets are collected and loaded into the computational environment for analysis. These datasets typically consist of dissolved gas concentration measurements from transformer oil, together with their corresponding fault classification labels. The reliability of this stage is critical, as any inconsistencies in raw data can directly affect the performance and validity of subsequent machine learning models.
 
-The dataset includes key dissolved gases such as hydrogen (H$_2$), methane (CH$_4$), ethane (C$_2$H$_6$), ethylene (C$_2$H$_4$), acetylene (C$_2$H$_2$), carbon monoxide (CO), and carbon dioxide (CO$_2$). These gases are widely used in transformer diagnostics because they are directly associated with different fault mechanisms occurring within transformer insulation systems \parencite{Ali2023ConventionalDGA}.
+The dataset comprises key dissolved gases, including hydrogen (H$_2$), methane (CH$_4$), ethane (C$_2$H$_6$), ethylene (C$_2$H$_4$), acetylene (C$_2$H$_2$), carbon monoxide (CO), and carbon dioxide (CO$_2$). These gases are widely used in transformer diagnostics due to their established relationship with different thermal and electrical fault mechanisms occurring within transformer insulation systems \parencite{Ali2023ConventionalDGA}.
 
-During data ingestion, the dataset structure is carefully verified to ensure that all required attributes are present and correctly formatted. This includes checking the consistency of column names, data types, and label distributions. Any structural inconsistencies are corrected at this stage to prevent downstream errors during model training.
+During ingestion, the dataset structure is verified to ensure consistency and correctness of all attributes. This includes checking column names, data types, and class label distributions. Samples with missing labels or ambiguous classifications are removed to avoid introducing uncertainty in supervised learning, consistent with standard data cleaning practices in machine learning pipelines (Wu et al., 2015).
 
-Initial cleaning is then performed to address data quality issues. Missing values are identified and treated using appropriate statistical or imputation methods depending on the severity of missingness. This ensures that the dataset remains complete without introducing bias into the learning process.
+Initial cleaning is performed to address data quality issues such as missing values and incomplete records. Missing data are handled using appropriate imputation techniques or statistical treatments depending on the extent and nature of the missingness. This step ensures that data completeness is maintained while minimising the introduction of bias into the learning process.
 
-In addition, noise filtering is applied to remove inconsistent or outlier values that may distort the learning patterns of machine learning models. This step is important because real-world industrial datasets often contain measurement errors or abnormal readings that do not represent actual transformer operating conditions.
+Noise filtering is also applied to reduce the impact of inconsistent or outlier values that may distort model learning. This is particularly important in real-world industrial datasets, where measurement errors or abnormal operating conditions may be present and do not necessarily represent valid transformer fault behaviour (Gonzalez & Woods, 2008).
 
-Normalization is also applied as part of preprocessing to ensure that all gas concentration values are represented on a comparable scale. This is particularly important because different gases exhibit different magnitude ranges, and unscaled data may lead to biased learning in distance-sensitive algorithms.
+Finally, normalization is applied to ensure that all gas concentration values are brought onto a comparable scale. This is essential because different gases operate within different magnitude ranges, and unscaled data may bias distance-based or gradient-sensitive machine learning algorithms. Overall, this stage ensures that the dataset is clean, consistent, and appropriately structured for effective feature engineering and model development in subsequent stages.
 
 %====================================================
 \section{Feature Extraction Framework}
 
-Feature extraction is a fundamental stage in the machine learning pipeline where raw DGA measurements are transformed into meaningful representations that can be effectively processed by classification models. The purpose of this stage is to convert raw numerical gas values into structured feature representations that capture relevant patterns associated with transformer faults.
+Feature extraction is a key stage in the machine learning pipeline, where raw Dissolved Gas Analysis (DGA) measurements are transformed into structured representations suitable for classification models. The main objective of this stage is to convert numerical gas concentrations into informative feature representations that capture underlying patterns associated with transformer fault conditions.
 
-In transformer diagnostics, raw gas concentrations alone may not fully represent the underlying relationships between fault conditions. Therefore, feature extraction plays a critical role in enhancing the representational power of the dataset by introducing different perspectives of the same underlying data structure \parencite{Hu2025InterpretableEdge}.
+In transformer diagnostics, raw gas concentrations alone may not sufficiently describe the complex relationships between different fault mechanisms. Therefore, feature extraction is necessary to improve the representational capability of the dataset by providing alternative perspectives of the same underlying measurements \parencite{Hu2025InterpretableEdge}.
 
-This framework is designed to extract multiple types of features, each focusing on a different aspect of the data. These include density-based representations, transformation-based representations, structural representations, and statistical representations. Each feature type contributes uniquely to the overall understanding of transformer fault behavior.
+This framework involves the construction of multiple feature categories, each designed to capture different characteristics of the data. These include density-based representations, transformation-based representations, structural representations, and statistical representations. Each category provides complementary information that contributes to a more comprehensive description of transformer fault behaviour. By leveraging diverse feature representations, the machine learning model can learn more complex relationships within the dataset, ultimately improving classification performance and interpretability. The following subsections detail the specific types of features extracted from the DGA data and their respective purposes in the overall classification framework.
 
 %====================================================
 \subsection{Density Features}
 
-Density features represent the distribution characteristics of gas concentrations within the dataset. This feature type focuses on how frequently specific gas concentration ranges occur and how data points are distributed across different fault categories.
+Density features describe the distributional characteristics of dissolved gas concentrations within the dataset. This feature type focuses on the frequency and spread of gas concentration values across different ranges and how these distributions vary across transformer fault categories.
 
-The purpose of density-based representation is to capture the overall distribution pattern of gases rather than focusing solely on individual values. This allows the model to understand how gas concentrations are distributed across different operating conditions of transformers.
+The objective of density-based representation is to capture global distribution behaviour rather than relying solely on individual gas measurements. This enables the model to learn how gas concentrations are distributed under different operating and fault conditions in transformers \parencite{Hu2025InterpretableEdge}.
 
-By analyzing density patterns, it becomes possible to identify regions of high and low concentration activity, which may correspond to different types of fault conditions. This representation provides an additional layer of information beyond raw numerical values.
+By analysing density patterns, regions of concentrated or sparse gas occurrences can be identified, which may be associated with different fault conditions. This provides complementary information to raw gas values by incorporating distributional context into the feature representation.
 
 %====================================================
 \subsection{Radon Transform Features}
 
-Radon transform features are derived through mathematical transformations that project data into alternative representation spaces. The purpose of this transformation is to capture hidden structural information that may not be directly observable in the original feature space.
+Radon transform features are derived through mathematical transformations that project the original data into alternative representation spaces. The purpose of this transformation is to extract hidden structural information that may not be directly observable in the original feature space \parencite{Hu2025InterpretableEdge}.
 
-This transformation technique is useful for identifying global patterns within the dataset by analyzing how data behaves under different projection angles. It allows the model to capture structural relationships that may otherwise remain hidden in conventional feature representations.
+This transformation technique enables the identification of global patterns by analysing how the dataset behaves under different projection directions. In this way, structural relationships within the data can be captured more effectively compared to relying solely on conventional feature representations.
 
-The use of transformation-based features enhances the ability of the machine learning model to learn more complex relationships within the dataset without altering the original data semantics.
+The use of transformation-based features enhances the ability of machine learning models to learn more complex patterns within the dataset while preserving the original semantic meaning of the gas measurements. This contributes to improved classification performance and interpretability in transformer fault diagnostics.
 
 %====================================================
 \subsection{Geometric Features}
 
-Geometric features describe the structural relationships between gas variables in a spatial context. These features are designed to capture the shape and configuration of data points when represented in multidimensional space.
+Geometric features describe the structural relationships between dissolved gas variables in a spatial context. These features are designed to capture the shape and configuration of data points when represented in a multidimensional feature space \parencite{Hu2025InterpretableEdge}.
 
-The main objective of geometric representation is to understand how different gas variables interact with each other in terms of spatial distribution. This includes analyzing how gas combinations form specific patterns that may correspond to different fault types.
+The main objective of geometric representation is to analyse how different gas variables interact with one another in terms of spatial distribution. This includes examining how combinations of gas concentrations form structured patterns that may correspond to different transformer fault conditions.
 
-By representing data geometrically, the model gains a better understanding of relational structures within the dataset, which can improve classification performance in complex scenarios.
+By representing the data in a geometric form, the model gains improved awareness of relational structures within the dataset, which may contribute to better classification performance in complex fault scenarios. This approach allows the model to learn not only from individual gas measurements but also from the spatial relationships between them, providing a richer representation of transformer fault behaviour.
 
 %====================================================
 \subsection{Statistical Features}
 
-Statistical features represent the numerical properties of gas distributions using standard statistical measures. These include mean, variance, skewness, and kurtosis, which collectively describe the central tendency, dispersion, and shape of the data distribution.
+Statistical features represent the numerical properties of dissolved gas distributions using standard statistical measures. These typically include mean, variance, skewness, and kurtosis, which collectively describe the central tendency, dispersion, and shape of the data distribution \parencite{Hu2025InterpretableEdge}.
 
-The purpose of statistical representation is to summarize the behavior of gas concentrations in a compact mathematical form. This allows the model to capture essential characteristics of the dataset without relying on raw values alone.
+The purpose of statistical representation is to summarise the behaviour of gas concentrations in a compact mathematical form. This enables the model to capture essential distributional characteristics of the dataset without relying solely on raw gas values.
 
-These features are particularly useful in identifying variability patterns and distribution asymmetry, which may be indicative of specific transformer fault conditions.
+These features are particularly useful for identifying variability patterns and distribution asymmetry, which may be associated with specific transformer fault conditions. By incorporating statistical features, the model can learn from both the central tendencies and the variability of gas concentrations, contributing to improved classification performance and interpretability in transformer diagnostics.
 
 %====================================================
 \section{Feature Expansion and Selection}
 
-Feature expansion and selection represent a critical stage in the methodology where the feature space is enhanced and refined to improve model performance. Feature expansion increases the diversity of feature representations, while feature selection ensures that only the most relevant features are retained.
+Feature expansion and selection represent a key stage in the machine learning pipeline, where the feature space is both enriched and refined to improve model performance. Feature expansion increases the diversity and expressiveness of feature representations, while feature selection ensures that only the most informative variables are retained for model training.
 
-The importance of this stage lies in balancing model complexity and predictive performance. Excessive features may introduce noise and redundancy, while insufficient features may lead to loss of important information \parencite{Laburu2024Insights}.
+The importance of this stage lies in achieving an appropriate balance between model complexity and predictive performance. An excessive number of features may introduce redundancy and noise, while an insufficient feature set may result in the loss of critical information needed for accurate classification \parencite{Laburu2024Insights}. Therefore, a systematic approach to feature expansion and selection is essential to enhance the representational capacity of the dataset while maintaining computational efficiency and model interpretability.
 
 %====================================================
 \subsection{Feature Expansion}
 
-Feature expansion refers to the process of generating additional feature representations from existing gas measurements. This is achieved through mathematical transformations and combinations of original features.
+Feature expansion refers to the process of generating additional feature representations from existing dissolved gas measurements. This is achieved through mathematical transformations or combinations of original features, and is commonly used within feature engineering frameworks to improve data representativeness \parencite{Wilfling2023FeatureEngineering}.
 
-The purpose of feature expansion is to enrich the dataset by introducing new perspectives of the same underlying information. This allows machine learning models to capture more complex relationships between gas variables and fault conditions.
+The purpose of feature expansion is to enrich the dataset by introducing alternative representations of the same underlying information. This enables machine learning models to capture more complex relationships between gas variables and transformer fault conditions.
 
-By expanding the feature space, the model gains access to a more expressive representation of the data, which may improve classification capability.
+By expanding the feature space, the model obtains a more expressive representation of the data, which may support improved classification performance in transformer fault diagnosis. This is particularly important in scenarios where the original gas measurements may not fully capture the underlying fault mechanisms, and additional representations can provide complementary insights.
 
 %====================================================
 \subsection{Feature Selection Strategy}
 
-Feature selection is the process of identifying and retaining only the most relevant features for model training. This step is essential for reducing redundancy and improving computational efficiency.
+Feature selection is the process of identifying and retaining only the most relevant features for model training. This step is essential for reducing redundancy, improving computational efficiency, and supporting better predictive performance by removing features that contribute little to the classification task \parencite{Guyon2003FeatureSelection}.
 
-The selection process ensures that irrelevant or weakly correlated features are removed, allowing the model to focus on the most informative variables. This contributes to improved generalization performance and reduces the risk of overfitting.
+The selection process ensures that irrelevant, redundant, or weakly correlated features are removed, allowing the model to focus on the most informative variables. This contributes to improved generalization performance and reduces the risk of overfitting in machine learning models \parencite{Guyon2003FeatureSelection}.
 
 %====================================================
 \subsection{Stage 1: Global Pre-Filtering}
 
-Global pre-filtering is the initial stage of feature selection where features with minimal contribution are removed. This step is performed to reduce noise and simplify the feature space before more detailed selection is applied.
+Global pre-filtering represents the initial stage of the feature selection process, where features with minimal relevance or weak contribution to the prediction task are removed. This step is commonly used to reduce data noise, eliminate redundancy, and simplify the feature space before more refined selection techniques are applied \parencite{IEEE10788781}.
 
-By eliminating weak features early, the dataset becomes more structured and easier to analyze in subsequent stages.
+By removing weak or irrelevant features at an early stage, the dataset becomes more structured and computationally efficient for subsequent analysis. This also improves the stability of later feature selection stages by ensuring that only meaningful variables are retained for further evaluation.
 
 %====================================================
 \subsection{Stage 2: Fine Selection Tracks}
 
-Fine selection tracks involve a more detailed evaluation of the remaining features. This stage focuses on identifying the most optimal subset of features that contribute significantly to classification performance.
+Fine selection tracks involve a more detailed evaluation of the remaining features after the initial global pre-filtering stage. This stage focuses on identifying the most relevant subset of features that contributes meaningfully to classification performance in the machine learning models \parencite{Guyon2003FeatureSelection}.
 
-The objective of this stage is to refine the feature set to ensure that only the most relevant and informative features are retained for model training.
-
+The objective of this stage is to refine the feature set by ensuring that only the most informative and discriminative features are retained for model training and evaluation. This supports the development of a more compact and effective predictor while reducing unnecessary feature complexity \parencite{Guyon2003FeatureSelection}.
 %====================================================
 \section{Data Splitting and Hybrid Balancing}
 
-Data splitting is performed to divide the dataset into training and testing subsets. This ensures that model performance can be evaluated on unseen data, providing a reliable measure of generalization capability.
+Data splitting is performed to divide the dataset into training and testing subsets. This ensures that model performance is evaluated on unseen data, providing a reliable measure of generalization capability. This practice is consistent with standard machine learning evaluation procedures, where proper separation of data is essential to avoid biased performance estimation (Kohavi, 1995; Hastie et al., 2009).
 
-Cross-validation is also applied to further enhance the robustness of the evaluation process. This helps reduce variability in performance estimates and ensures that the model is not overfitted to a specific data split.
+Cross-validation is also applied to further enhance the robustness of the evaluation process. This technique reduces variability in performance estimates and helps ensure that the model is not overfitted to a specific train-test split. The use of resampling-based evaluation strategies is widely supported in the literature as a reliable approach for performance estimation in predictive modelling (Arlot & Celisse, 2010; Hastie et al., 2009).
 
-Class imbalance is addressed using hybrid balancing techniques such as SMOTE. This ensures that minority fault classes are adequately represented during model training, preventing bias toward majority classes \parencite{Azmi2025Imbalance}.
+Class imbalance is addressed using hybrid balancing techniques such as SMOTE. This ensures that minority fault classes are adequately represented during model training, thereby reducing bias toward majority classes \parencite{Azmi2025Imbalance}. SMOTE is a well-established oversampling technique for handling imbalanced datasets in supervised learning (Chawla et al., 2002), and its effectiveness has been widely discussed in imbalance learning literature (He & Garcia, 2009; Branco et al., 2016).
 
 %====================================================
 \section{Model Training and Evaluation}
 
-Model training involves the application of machine learning algorithms to the processed feature sets for fault classification. The training process is conducted in a controlled environment to ensure fairness and consistency across all models.
+Seven machine learning classifiers are trained using the optimized feature sets, including Logistic Regression, k-Nearest Neighbors, Decision Tree, Random Forest, Gradient Boosting, Extreme Gradient Boosting (XGBoost), and Support Vector Machines. These models represent a diverse set of linear, non-linear, and ensemble learning paradigms commonly used in supervised classification tasks (Bishop, 2006; Chen & Guestrin, 2016).
 
-Evaluation is performed using standard classification metrics, including accuracy, precision, recall, and F1-score. These metrics provide a comprehensive assessment of model performance, especially in scenarios involving class imbalance.
+Hyperparameter tuning is performed using three-fold stratified cross-validation on the training data (Kohavi, 1995). This ensures that model optimization is performed in a consistent and unbiased manner across different folds of the dataset.
 
-The results of the evaluation are used to compare the effectiveness of different feature sets and machine learning models in DGA-based transformer fault classification.
+Final performance is evaluated on the locked test set using macro-averaged F1-score and macro-averaged recall, which are recommended metrics for imbalanced multi-class classification problems (Saito & Rehmsmeier, 2015). These metrics ensure that minority fault classes are given equal importance during evaluation.
+
+Overfitting is assessed by comparing performance between training and testing results, allowing identification of any significant generalization gaps.
+
+The overall methodological pipeline follows a strictly sequential Directed Acyclic Graph (DAG) structure, where each stage receives inputs only from its immediate predecessor. This ensures unidirectional data flow and prevents information leakage. The process begins with data ingestion and cleaning, followed by feature extraction, feature selection, data splitting, and class balancing. Feature scaling, hybrid balancing, and feature selection are applied only on the training set to avoid data leakage. Model training and hyperparameter tuning are then performed using cross-validation, and final evaluation is conducted once on the unseen test set. This structure ensures that reported results reflect true model generalization rather than optimistic bias caused by data reuse. The use of a DAG structure is consistent with best practices in machine learning pipeline design, ensuring methodological rigor and reproducibility (Sculley et al., 2015; Buitinck et al., 2013).

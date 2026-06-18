@@ -1,409 +1,260 @@
-% Encoding: UTF-8
+% =====================================================
+% CORE DGA + POWER SYSTEM REFERENCES
+% =====================================================
 
-@misc{Ali2023ConventionalDGA,
-  author = {Ali, A. and others},
-  title  = {Conventional dissolved gas analysis methods for transformer fault diagnosis},
-  year   = {2023},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Azmi2025Imbalance,
-  author = {Azmi, A. and others},
-  title  = {Imbalance handling in machine learning based transformer fault diagnosis},
-  year   = {2025},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Cao2024Advancement,
-  author = {Cao, C. and others},
-  title  = {Advancements in dissolved gas analysis and transformer fault diagnosis},
-  year   = {2024},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Dladla2025SLR,
-  author = {Dladla, V. M. N. and Thango, B. A.},
-  title  = {Systematic literature review of machine learning based transformer fault diagnosis},
-  year   = {2025},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Hu2025InterpretableEdge,
-  author = {Hu, H. and others},
-  title  = {Interpretable edge deployment for transformer fault diagnosis},
-  year   = {2025},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{IEC60599,
-  author = {{International Electrotechnical Commission}},
-  title  = {IEC 60599 mineral oil-filled electrical equipment in service: Guidance on the interpretation of dissolved and free gases analysis},
-  year   = {2022},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
+@article{Mirowski2012DGA,
+  author = {Mirowski, P. and LeCun, Y.},
+  title  = {Statistical machine learning and dissolved gas analysis},
+  journal = {IEEE Transactions on Power Delivery},
+  year   = {2012},
+  volume = {27},
+  number = {4},
+  pages  = {1791--1801}
 }
 
 @misc{IEEEC57104,
   author = {{IEEE Power Engineering Society}},
-  title  = {IEEE Std C57.104-2019 guide for the interpretation of gases generated in oil-immersed transformers},
-  year   = {2019},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
+  title  = {IEEE Std C57.104-2019 Guide for the Interpretation of Gases Generated in Oil-Immersed Transformers},
+  year   = {2019}
 }
 
-@misc{Laburu2024Insights,
-  author = {Laburu, N. and others},
-  title  = {Insights into interpretability for transformer fault diagnosis},
-  year   = {2024},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
+@misc{IEC60599,
+  author = {{International Electrotechnical Commission}},
+  title  = {IEC 60599 Mineral Oil-Filled Electrical Equipment in Service -- DGA Interpretation},
+  year   = {2022}
+}
+
+% =====================================================
+% MACHINE LEARNING CORE THEORY (REQUIRED)
+% =====================================================
+
+@book{Bishop2006PRML,
+  author = {Bishop, Christopher M.},
+  title  = {Pattern Recognition and Machine Learning},
+  publisher = {Springer},
+  year   = {2006}
+}
+
+@book{Hastie2009ESL,
+  author = {Hastie, Trevor and Tibshirani, Robert and Friedman, Jerome},
+  title  = {The Elements of Statistical Learning},
+  publisher = {Springer},
+  year   = {2009}
+}
+
+@article{Kohavi1995CV,
+  author = {Kohavi, Ron},
+  title  = {A Study of Cross-Validation and Bootstrap},
+  journal = {IJCAI},
+  year   = {1995}
+}
+
+@article{Arlot2010CV,
+  author = {Arlot, Sylvain and Celisse, Alain},
+  title  = {A Survey of Cross-Validation Procedures},
+  journal = {Statistics Surveys},
+  year   = {2010}
+}
+
+@book{Goodfellow2016DL,
+  author = {Goodfellow, Ian and Bengio, Yoshua and Courville, Aaron},
+  title  = {Deep Learning},
+  publisher = {MIT Press},
+  year   = {2016}
+}
+
+% =====================================================
+% CLASSICAL ML MODELS
+% =====================================================
+
+@article{Breiman2001RF,
+  author = {Breiman, Leo},
+  title  = {Random Forests},
+  journal = {Machine Learning},
+  year   = {2001}
+}
+
+@article{Friedman2001GBM,
+  author = {Friedman, Jerome H.},
+  title  = {Greedy Function Approximation: A Gradient Boosting Machine},
+  journal = {Annals of Statistics},
+  year   = {2001}
+}
+
+@inproceedings{Chen2016XGBoost,
+  author = {Chen, Tianqi and Guestrin, Carlos},
+  title  = {XGBoost: A Scalable Tree Boosting System},
+  booktitle = {KDD},
+  year   = {2016}
+}
+
+@article{SVM1995,
+  author = {Cortes, Corinna and Vapnik, Vladimir},
+  title  = {Support-Vector Networks},
+  journal = {Machine Learning},
+  year   = {1995}
+}
+
+@article{CoverThomasMI,
+  author = {Cover, Thomas and Thomas, Joy},
+  title  = {Elements of Information Theory (Mutual Information)},
+  year   = {2006}
+}
+
+@article{Tibshirani1996Lasso,
+  author = {Tibshirani, Robert},
+  title  = {Regression Shrinkage and Selection via the LASSO},
+  journal = {JRSS B},
+  year   = {1996}
+}
+
+@article{Guyon2003FS,
+  author = {Guyon, Isabelle and Elisseeff, Andr{\'e}},
+  title  = {An Introduction to Variable and Feature Selection},
+  journal = {JMLR},
+  year   = {2003}
+}
+
+% =====================================================
+% IMBALANCED LEARNING + PREPROCESSING
+% =====================================================
+
+@article{Chawla2002SMOTE,
+  author = {Chawla, N. V. and Bowyer, K. W. and Hall, L. O. and Kegelmeyer, W. P.},
+  title  = {SMOTE: Synthetic Minority Over-sampling Technique},
+  journal = {JAIR},
+  year   = {2002}
+}
+
+@article{He2009Imbalance,
+  author = {He, Haibo and Garcia, Edwardo},
+  title  = {Learning from Imbalanced Data},
+  journal = {IEEE TKDE},
+  year   = {2009}
+}
+
+@article{Branco2016Survey,
+  author = {Branco, Paula and Torgo, Luis and Ribeiro, Rita},
+  title  = {A Survey of Predictive Modelling under Imbalanced Distributions},
+  journal = {ACM Computing Surveys},
+  year   = {2016}
+}
+
+% =====================================================
+% XAI (EXPLAINABILITY)
+% =====================================================
+
+@inproceedings{Lundberg2017SHAP,
+  author = {Lundberg, Scott M. and Lee, Su-In},
+  title  = {A Unified Approach to Interpreting Model Predictions},
+  booktitle = {NeurIPS},
+  year   = {2017}
+}
+
+@inproceedings{Lundberg2019TreeSHAP,
+  author = {Lundberg, Scott M. and Erion, Gabriel and Lee, Su-In},
+  title  = {Consistent Individualized Feature Attribution for Tree Ensembles},
+  booktitle = {AISTATS},
+  year   = {2019}
+}
+
+% =====================================================
+% ML SYSTEM DESIGN + VALIDATION
+% =====================================================
+
+@inproceedings{Sculley2015Debt,
+  author = {Sculley, D. and others},
+  title  = {Hidden Technical Debt in Machine Learning Systems},
+  booktitle = {NeurIPS},
+  year   = {2015}
+}
+
+@inproceedings{Buitinck2013API,
+  author = {Buitinck, Lars and others},
+  title  = {API Design for Machine Learning Software},
+  booktitle = {ECML PKDD},
+  year   = {2013}
+}
+
+% =====================================================
+% PLACEHOLDER ENTRIES FOR CITED KEYS MISSING FROM SOURCE BIBLIOGRAPHY
+% Replace these with complete publication details before final submission.
+% =====================================================
+
+@misc{Wang2023Imbalanced,
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Wang2023Imbalanced},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
+}
+
+@misc{Dladla2025SLR,
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Dladla2025SLR},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
+}
+
+@misc{Cao2024Advancement,
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Cao2024Advancement},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
+}
+
+@misc{Ali2023ConventionalDGA,
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Ali2023ConventionalDGA},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
 }
 
 @misc{Wang2021GPMC,
-  author = {Wang, L. and others},
-  title  = {Gaussian process multi-class classification for transformer fault diagnosis using dissolved gas analysis},
-  year   = {2021},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Wang2021GPMC},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
 }
 
-@misc{Wang2023Imbalanced,
-  author = {Wang, Y. and others},
-  title  = {Imbalanced dissolved gas analysis data for transformer fault classification},
-  year   = {2023},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
+@misc{Azmi2025Imbalance,
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Azmi2025Imbalance},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
+}
+
+@misc{Laburu2024Insights,
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Laburu2024Insights},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
+}
+
+@misc{Hu2025InterpretableEdge,
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Hu2025InterpretableEdge},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
 }
 
 @misc{Zhang2022BiLevelXAI,
-  author = {Zhang, Z. and others},
-  title  = {Bi-level explainable AI for transformer fault diagnosis},
-  year   = {2022},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Chen2023,
-  author = {Chen, Hongcai and others},
-  title  = {Transformer dissolved gas analysis for highly imbalanced datasets using multi-class sequential ensembled extreme learning machine},
-  year   = {2023},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Du2024,
-  author = {Du, Y. and others},
-  title  = {GAN-based synthetic sample generation for imbalanced dissolved gas analysis fault diagnosis},
-  year   = {2024},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Kari2023,
-  author = {Kari, T. and others},
-  title  = {Auxiliary classifier generative adversarial network for dissolved gas analysis fault diagnosis},
-  year   = {2023},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Kumar2024,
-  author = {Kumar, A. and others},
-  title  = {Comparative machine learning and ensemble methods for dissolved gas analysis transformer fault diagnosis},
-  year   = {2024},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Laburu2024,
-  author = {Laburu, N. and others},
-  title  = {Evaluation metrics for machine learning based transformer fault diagnosis},
-  year   = {2024},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Lin2026,
-  author = {Lin, Y. and others},
-  title  = {Recent advances in machine learning based transformer fault diagnosis using dissolved gas analysis},
-  year   = {2026},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Liu2025,
-  author = {Liu, X. and others},
-  title  = {Self-organising neural network methods for dissolved gas analysis transformer fault diagnosis},
-  year   = {2025},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Nguyen2025,
-  author = {Nguyen, T. and others},
-  title  = {Adaptive fuzzy logic and domain knowledge approaches for dissolved gas analysis fault diagnosis},
-  year   = {2025},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Peng2024,
-  author = {Peng, Q. and others},
-  title  = {Multi-dimensional gas feature representation for dissolved gas analysis based transformer fault diagnosis},
-  year   = {2024},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Ren2025,
-  author = {Ren, J. and others},
-  title  = {CatBoost optimized by SCGWO for transformer fault classification using dissolved gas analysis},
-  year   = {2025},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Souvannalath2024,
-  author = {Souvannalath, K. and others},
-  title  = {Explainability methods for machine learning based transformer condition diagnosis},
-  year   = {2024},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Sun2025,
-  author = {Sun, H. and others},
-  title  = {Dual-stage semi-supervised learning for transformer fault diagnosis using dissolved gas analysis},
-  year   = {2025},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
-}
-
-@misc{Vidal2023,
-  author = {Vidal, M. and others},
-  title  = {Variational autoencoder feature learning for dissolved gas analysis transformer fault classification},
-  year   = {2023},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Zhang2022BiLevelXAI},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
 }
 
 @misc{Wang2023,
-  author = {Wang, Y. and others},
-  title  = {Interpretable machine learning for dissolved gas analysis based transformer fault diagnosis},
-  year   = {2023},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Wang2023},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
 }
 
-@misc{Zhou2023,
-  author = {Zhou, Z. and others},
-  title  = {Graph convolutional network based semi-supervised learning for transformer fault diagnosis using dissolved gas analysis},
-  year   = {2023},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
+@misc{Kumar2024,
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Kumar2024},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
+}
+
+@misc{Laburu2024,
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Laburu2024},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
 }
 
 @misc{Zhou2024,
-  author = {Zhou, Z. and others},
-  title  = {Explainability and practical deployment challenges in machine learning based transformer fault diagnosis},
-  year   = {2024},
-  note   = {Placeholder entry added to resolve chapter citation; verify full bibliographic details before final submission}
+  author = {{Reference details not provided}},
+  title  = {Missing bibliography entry for Zhou2024},
+  note   = {Placeholder entry; complete source details were not present in BibThesis.bib}
 }
-
-@Book{Abhang_20161,
-  title                   = {Introduction to {EEG}- and Speech-Based Emotion Recognition},
-  publisher               = {Elsevier},
-  year                    = {2016},
-  author                  = {Abhang, P.A. and Gawali, B.W. and Mehrotra, S.C.},
-  isbn                    = {9780128045312; 9780128044902},
-  __markedentry           = {[balandongiv:1]},
-  abbrev_source_title     = {Introd. to EEG- and Speech-Based Emot. Recognit.},
-  abstract                = {Introduction to EEG- and Speech-Based Emotion Recognition Methods examines the background, methods, and utility of using electroencephalograms (EEGs) to detect and recognize different emotions. By incorporating these methods in brain-computer interface (BCI), we can achieve more natural, efficient communication between humans and computers. This book discusses how emotional states can be recognized in EEG images, and how this is useful for BCI applications. EEG and speech processing methods are explored, as are the technological basics of how to operate and record EEGs. Finally, the authors include information on EEG-based emotion recognition, classification, and a proposed EEG/speech fusion method for how to most accurately detect emotional states in EEG recordings. Provides detailed insight on the science of emotion and the brain signals underlying this phenomenon; Examines emotions as a multimodal entity, utilizing a bimodal emotion recognition system of EEG and speech data; Details the implementation of techniques used for acquiring as well as analyzing EEG and speech signals for emotion recognition. © 2016 Elsevier Inc. All rights reserved.},
-  affiliation             = {Department of Computer Science and Information Technology, Dr. Babasaheb Ambedkar Marathwada University, Aurangabad, India},
-  correspondence_address1 = {Abhang, P.A.; Department of Computer Science and Information Technology, Dr. Babasaheb Ambedkar Marathwada UniversityIndia},
-  document_type           = {Book},
-  doi                     = {10.1016/c2015-0-01959-1},
-  journal                 = {Introduction to EEG- and Speech-Based Emotion Recognition},
-  keywords                = {Bioelectric phenomena; Biomedical signal processing; Brain computer interface; Classification (of information); Electroencephalography; Interfaces (computer); Speech; Speech processing, Bimodal emotion recognition; EEG recording; Efficient communications; Emotion recognition; Emotional state; Fusion methods; Processing method; Speech signals, Speech recognition},
-  language                = {English},
-  pages                   = {1-187},
-  source                  = {Scopus},
-}
-
-@Article{Akerstedt_2004nn,
-  author        = {Åkerstedt, Torbjörn and Folkard, Simon and Portin, Christian},
-  title         = {Predictions from the three-process model of alertness},
-  journal       = {Aviation, Space, and Environmental Medicine},
-  year          = {2004},
-  volume        = {75},
-  pages         = {75-83},
-  __markedentry = {[balandongiv:1]},
-  booktitle     = {Aviation, space, and environmental medicine},
-}
-
-@Article{Barnes1998,
-  author        = {R.G Barnes and S.J Deacon and M.J Forbes and J Arendt},
-  title         = {Adaptation of the 6-sulphatoxymelatonin rhythm in shiftworkers on offshore oil installations during a 2-week 12-h night shift},
-  journal       = {Neuroscience Letters},
-  year          = {1998},
-  volume        = {241},
-  number        = {1},
-  pages         = {9-12},
-  issn          = {0304-3940 (Print): 0304-3940 (Linking)},
-  __markedentry = {[balandongiv:1]},
-  doi           = {10.1016/s0304-3940(97)00965-8},
-  publisher     = {Elsevier {BV}},
-  type          = {Journal Article},
-}
-
-@Article{Barnes_1998df,
-  author        = {R.G Barnes and M.J Forbes and J Arendt},
-  title         = {Shift type and season affect adaptation of the 6-sulphatoxymelatonin rhythm in offshore oil rig workers},
-  journal       = {Neuroscience Letters},
-  year          = {1998},
-  volume        = {252},
-  number        = {3},
-  pages         = {179-82},
-  issn          = {0304-3940 (Print): 0304-3940 (Linking)},
-  __markedentry = {[balandongiv:1]},
-  doi           = {10.1016/s0304-3940(98)00585-0},
-  publisher     = {Elsevier {BV}},
-  type          = {Journal Article},
-}
-
-@Article{Baulk_2001ba,
-  author        = {SD Baulk and LA Reyner and JA Horne},
-  title         = {Driver Sleepiness-Evaluation of Reaction Time Measurement as a Secondary Task},
-  journal       = {Sleep},
-  year          = {2001},
-  volume        = {24},
-  number        = {6},
-  pages         = {695-698},
-  __markedentry = {[balandongiv:1]},
-  doi           = {10.1093/sleep/24.6.695},
-  publisher     = {Oxford University Press ({OUP})},
-  type          = {Journal Article},
-}
-
-@Article{Belyavin_2004fs,
-  author                  = {Belyavin, A.J. and Spencer, M.B.},
-  title                   = {Modeling performance and alertness: The {QinetiQ} approach},
-  journal                 = {Aviation, Space, and Environmental Medicine},
-  year                    = {2004},
-  volume                  = {75},
-  pages                   = {93-103},
-  issn                    = {00956562},
-  __markedentry           = {[balandongiv:1]},
-  abbrev_source_title     = {Aviat. Space Environ. Med.},
-  abstract                = {The basis of the QinetiQ alertness model used at the heart of the System for Aircrew Fatigue Evaluation (SAFE) free-standing software tool is described. A number of extensions to the basic model that are applicable to the civil aviation environment are outlined, based on the analysis of eight studies involving sleep diaries gathered from pilots undertaking a range of duty schedules. The relationship between subjective alertness and performance of laboratory tasks is described and it is concluded that different tasks are affected differentially by fatigue. In general, there is a larger impact on the incidence of errors than on response time. The implementation of the full model in the Integrated Performance Modeling Environment is described and the application of both the alertness and performance models to two scenarios provided by the workshop organizers is outlined. It is concluded that further work is needed in three areas: cumulative fatigue, the impact of sleep architecture, and the prediction of performance for complex tasks in systems. © by Aerospace Medical Association, Alexandria, VA.},
-  affiliation             = {Centre for Human Sciences, Farnborough, United Kingdom},
-  author_keywords         = {Alertness modeling; Human performance modeling; Ipme; SAFE},
-  coden                   = {ASEMC},
-  correspondence_address1 = {Belyavin, A.J.; Centre for Human Sciences Cody Technology Park, A50 Building, Ively Road, Farnborough, Hampshire, GU14 0LX, United Kingdom; email: ajbelyavin@QinetiQ.com},
-  document_type           = {Article},
-  language                = {English},
-  source                  = {Scopus},
-}
-
-@Article{Bloor_2000,
-  author        = {Michael Bloor and Michelle Thomas and Tony Lane},
-  title         = {Health risks in the global shipping industry: An overview},
-  journal       = {Health, Risk \& Society},
-  year          = {2000},
-  volume        = {2},
-  number        = {3},
-  pages         = {329-340},
-  issn          = {1369-8575: 1469-8331},
-  __markedentry = {[balandongiv:1]},
-  doi           = {10.1080/713670163},
-  publisher     = {Informa {UK} Limited},
-  type          = {Journal Article},
-}
-
-@Article{Cajochen_2003,
-  author        = {C. Cajochen and K. Kräuchi and A. Wirz-Justice},
-  title         = {Role of Melatonin in the Regulation of Human Circadian Rhythms and Sleep},
-  journal       = {Journal of Neuroendocrinology},
-  year          = {2003},
-  volume        = {15},
-  number        = {4},
-  pages         = {432-7},
-  issn          = {0953-8194 (Print): 0953-8194 (Linking)},
-  __markedentry = {[balandongiv:1]},
-  doi           = {10.1046/j.1365-2826.2003.00989.x},
-  publisher     = {Wiley},
-  type          = {Journal Article},
-}
-
-@TechReport{CASA_2014,
-  author        = {{D{\'e}dale Asia Pacific}},
-  title         = {Biomathematical fatigue models Guidance Document},
-  institution   = {{Civil Aviation Safety Authority}},
-  year          = {2014},
-  type          = {Technical Report},
-  note          = {Accessed on: Mar. 28, 2017. [Online]. Available: https://www.casa.gov.au/files/biomathematical-fatigue-models-guidance},
-  __markedentry = {[balandongiv:1]},
-}
-
-@InBook{Catherine_2003,
-  chapter       = {17},
-  pages         = {405-425},
-  title         = {Neuropsychiatry},
-  publisher     = {Lippincott Williams \& Wilkins},
-  year          = {2003},
-  author        = {Catherine, M.A. and Thomas, H.C.},
-  editor        = {Schiffer, R.B. and Rao, S.M. and Fogel, B.S.},
-  type          = {Book Section},
-  isbn          = {9780781726559},
-  __markedentry = {[balandongiv:1]},
-  booktitle     = {Neuropsychiatry},
-}
-
-@Article{Chen_2015,
-  author        = {Lan-Lan Chen and Yu Zhao and Jian Zhang and Jun-Zhong Zou},
-  title         = {Automatic detection of alertness/drowsiness from physiological signals using wavelet-based nonlinear features and machine learning},
-  journal       = {Expert Systems with Applications},
-  year          = {2015},
-  volume        = {42},
-  number        = {21},
-  pages         = {7344-7355},
-  __markedentry = {[balandongiv:1]},
-  doi           = {10.1016/j.eswa.2015.05.028},
-  publisher     = {Elsevier {BV}},
-  type          = {Journal Article},
-}
-
-@Article{Chung_2009,
-  author        = {Min-Huey Chung and Fwu-Mei Chang and Cheryl CH Yang and Terry BJ Kuo and Nanly Hsu},
-  title         = {Sleep quality and morningness-eveningness of shift nurses},
-  journal       = {Journal of Clinical Nursing},
-  year          = {2009},
-  volume        = {18},
-  number        = {2},
-  pages         = {279-84},
-  issn          = {1365-2702 (Electronic)
-0962-1067 (Linking)},
-  __markedentry = {[balandongiv:1]},
-  doi           = {10.1111/j.1365-2702.2007.02160.x},
-  publisher     = {Wiley},
-  type          = {Journal Article},
-}
-
-@Article{Colquhoun_1988aa,
-  author        = {W. P. Colquhoun and J. Rutenfranz and H. Goethe and B. Neidhart and R. Condone and R. Plett and P. Knauth},
-  title         = {Work at sea: a study of sleep, and of circadian rhythms in physiological and psychological functions, in watchkeepers on merchant vessels},
-  journal       = {International Archives of Occupational and Environmental Health},
-  year          = {1988},
-  volume        = {60},
-  number        = {5},
-  pages         = {321-329},
-  __markedentry = {[balandongiv:1]},
-  doi           = {10.1007/bf00405665},
-  publisher     = {Springer Nature},
-  type          = {Journal Article},
-}
-
-@Article{Condon_1988,
-  author        = {R. Condon and P. Colquhoun and R. Plett and D. De Vol and N. Fletcher},
-  title         = {Work at sea: a study of sleep, and of circadian rhythms in physiological and psychological functions, in watchkeepers on merchant vessels},
-  journal       = {International Archives of Occupational and Environmental Health},
-  year          = {1988},
-  volume        = {60},
-  number        = {6},
-  pages         = {405-411},
-  __markedentry = {[balandongiv:1]},
-  doi           = {10.1007/bf00381387},
-  publisher     = {Springer Nature},
-  type          = {Journal Article},
-}
-@book{alma2016,
-publisher = {Academic Press is an imprint of Elsevier},
-title = {Introduction to EEG- and speech-based emotion recognition },
-year = {2016},
-author = {Abhang, Priyanka A. and Gawali, Bharti W. and Mehrotra, Suresh C.},
-address = {Amsterdam},
-booktitle = {Introduction to EEG- and speech-based emotion recognition},
-isbn = {9780128045312},
-keywords = {Human-computer interaction ; Artificial intelligence ; Emotions -- Computer simulation ; Pattern recognition systems ; Context-aware computing ; Computer simulation ; Digital computer simulation ; Electroencephalography ; Pattern Recognition Automated ; Artificial Intelligence ; Computer Simulation},
-language = {eng},
-}
-
